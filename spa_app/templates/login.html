@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <title>Đăng nhập</title>
+</head>
+<body>
+    {% if error_message%}
+    <div class="alert alert-danger">{{error_message}}</div>
+    {% endif %}
+    <div class="container">
+        <form action="/login" id="form-login" method="post">
+            <h1>Đăng nhập</h1>
+            <input name="username" type="text" placeholder="Tên đăng nhập" required>
+            <input name="password" type="password" placeholder="Mật khẩu" required>
+            <div class="btn-box">
+                <button class="my-2" type="submit">Đăng nhập</button>
+            </div>
+            <div class="text-center">Chưa có tài khoản đăng ký <a href="/register">Tại đây</a></div>
+        </form>
+    </div>
+</body>
+</html>

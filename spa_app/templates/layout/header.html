@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="container text-dark">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav me-auto d-flex gap-4">
+                <li class="nav-item">
+                    <a class="navbar-homepage " href="/">Beauty Spa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)">Dịch vụ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)">Đội ngũ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)">Liên hệ</a>
+                </li>
+            </ul>
+            <div class="d-flex gap-3">
+                <a href="/order">
+                    <button type="button" class="btn btn-primary">Đặt lịch ngay</button>
+                </a>
+                {% if current_user.is_authenticated %}
+                <span>Chào</span>
+                <a href="#" >
+                    <button type="button" class="btn btn-dark">
+                        {{current_user.first_name}} {{current_user.last_name}}
+                    </button>
+                </a>
+                <a href="/logout">
+                    <button type="button" class="btn">Đăng xuất</button>
+                </a>
+                {% else %}
+                <a href="/login">
+                    <button type="button " class="btn btn-dark">Đăng nhập</button>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Ubuntu';
+}
+
+:root {
+    --container-width: 500px;
+    --container-height: 400px;
+}
+
+body {
+    background: linear-gradient(30deg, #2980B9, #6DD5FA, #FFFFFF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.container {
+    width: var(--container-width);
+    height: var(--container-height);
+    /* margin: 8% auto; */
+    background: linear-gradient(45deg, #C9D6FF, #E2E2E2);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Login */
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Form Register */
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #777;
+}
+
+.container form {
+    width: 85%;
+    height: 70%;
+    position: relative;
+    top: calc(var(--container-height) / 8);
+    left: calc(var(--container-width) /11);
+    overflow: hidden; /* hoặc visible tùy bạn */
+}
+
+.container form div[id^="form"] {
+    position: absolute;
+    transition: 0.5s;
+    height: 100%;
+    width: 100%;
+}
+
+.container form div#form2 {
+    left: 550px;
+}
+
+.container form div#form3 {
+    left: 550px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px 5px;
+    margin: 5px 0;
+    border: 0;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background: transparent;
+}
+
+form div#gender-box {
+    width: 100%;
+    padding: 10px 5px;
+    margin: 5px 0;
+}
+
+::placeholder {
+    color: #777;
+}
+
+.btn-box {
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+form .btn-box button {
+    width: calc(var(--container-width) / 3);
+    height: calc(var(--container-height) / 12);
+    margin: 0 0;
+    background: linear-gradient(to right, #1565c0, #1976d2);
+    border-radius: 30px;
+    border: 0;
+    outline: none;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.8em;
+}
+
+.step {
+    width: 100%;
+    height: calc(var(--container-height) / 8);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 -1px 5px -1px #000;
+    position: relative;
+}
+
+.step-col {
+    width: calc(var(--container-width) / 3);
+    text-align: center;
+    color: #333;
+    position: relative;
+}
+
+#progress {
+    position: absolute;
+    height: 100%;
+    width: calc(var(--container-width) / 3);
+    background: linear-gradient(to right, #1565c0, #1976d2);
+}
+
+small {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8em;
+}
+
+div.error-text {
+    display: none;
+    color: red;
+    text-align: center;
+    margin: 5px 0;
+    font-size: 1.2rem;
+}
+
+#progress::after {
+    content: '';
+    height: 0;
+    width: 0;
+    border-top: calc(var(--container-height) / 16) solid transparent;
+    border-bottom: calc(var(--container-height) / 16) solid transparent;
+    position: absolute;
+    right: calc(var(--container-height) / -16.1);
+    top: 0;
+    border-left: calc(var(--container-height) / 16) solid #1976d2;
+}
+
+@media only screen and (max-width: 480px) {
+    .btn-box {
+        margin: 5px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .container {
+        width: 400px;
+    }
+
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <title>Đăng ký</title>
+</head>
+
+<body>
+<!-- Form-->
+<!--Cần thử lại-->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} flashMessage">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="container">
+    <div class="step">
+        <div id="progress"></div>
+        <div class="step-col"><small>Bước 1</small></div>
+        <div class="step-col"><small>Bước 2 (Không bắt buộc)</small></div>
+        <div class="step-col"><small>Bước 3</small></div>
+    </div>
+
+    <form id="registerForm" action="/register" method="POST">
+        <h2>Đăng ký</h2>
+        <div id="form1">
+            <input type="text" name="username" placeholder="Tên đăng nhập">
+            <input type="password" name="password" placeholder="Mật khẩu">
+            <input type="password" name="confirm_password" placeholder="Nhập lại mật khẩu">
+            <div class="error-text"></div>
+            <div class="btn-box">
+                <button type="button" id="next1">Next</button>
+            </div>
+        </div>
+
+        <div id="form2">
+            <div id="gender-box">
+                <label for="gender">Giới tính</label>
+                <select name="gender" id="gender" class="form-select">
+                    <option value="" disabled selected>Chọn giới tính</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Khác">Khác</option>
+                </select>
+            </div>
+            <input type="date" name="dob" placeholder="Ngày sinh">
+            <input type="text" name="address" placeholder="Địa chỉ">
+            <div class="btn-box">
+                <button type="button" id="back1">Back</button>
+                <button type="button" id="next2">Next</button>
+            </div>
+        </div>
+
+        <div id="form3">
+            <input type="text" name="first_name" placeholder="Họ">
+            <input type="text" name="last_name" placeholder="Tên">
+            <input type="text" name="phone_number" placeholder="Số điện thoại">
+            <div class="btn-box">
+                <button type="button" id="back2">Back</button>
+                <button type="submit">Submit</button>
+            </div>
+        </div>
+
+
+    </form>
+
+</div>
+<script src="../static/login/login.js"></script>
+</body>
+</html>

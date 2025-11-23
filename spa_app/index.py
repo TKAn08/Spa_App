@@ -1,9 +1,9 @@
 from datetime import datetime
-from flask import Flask, render_template, request, flash, redirect, url_for, session
+from flask import render_template, request, flash, redirect, url_for, session, Blueprint
 from flask_login import current_user, login_user, logout_user
-from models import User
+from spa_app.models import User, UserRole
 from spa_app.dao import user_dao
-from spa_app import app, login
+from spa_app import app, login, admin_bp, admin
 
 @app.route('/')
 def index():
@@ -92,6 +92,25 @@ def logout_my_user():
 def load_user(user_id):
     return user_dao.get_user_by_id(user_id)
 
+@admin_bp.route("/admin-login", endpoint="admin-login", methods=['GET', 'POST'])
+def admin_login_view():
+    if current_user.is_authenticated and current_user.role == UserRole.ADMIN:
+        return redirect("/admin")
+    error_message = None
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = user_dao.auth_user(username, password)
+        if user and user.role == UserRole.ADMIN:
+            login_user(user)
+            return redirect("/admin")
+        else:
+            error_message = "Tài khoản không hợp lệ!"
+    return render_template("admin/admin-login.html", error_message=error_message)
+
+app.register_blueprint(admin_bp)
+
 if __name__ == '__main__':
     with app.app_context():
+        print(app.url_map)
         app.run(host="127.0.0.1", port=5001, debug=True)

@@ -51,7 +51,7 @@ h2 {
     width: 85%;
     height: 70%;
     position: relative;
-    top: calc(var(--container-height) / 8);
+    top: calc(var(--container-height) / 8.5);
     left: calc(var(--container-width) /11);
     overflow: hidden; /* hoặc visible tùy bạn */
 }

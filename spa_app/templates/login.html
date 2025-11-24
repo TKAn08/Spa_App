@@ -13,14 +13,16 @@
     <title>Đăng nhập</title>
 </head>
 <body>
-    {% if error_message%}
-    <div class="alert alert-danger">{{error_message}}</div>
-    {% endif %}
+
     <div class="container">
+        {% if error_message%}
+        <div class="alert alert-danger">{{error_message}}</div>
+        {% endif %}
         <form action="/login" id="form-login" method="post">
             <h1>Đăng nhập</h1>
             <input name="username" type="text" placeholder="Tên đăng nhập" required>
             <input name="password" type="password" placeholder="Mật khẩu" required>
+
             <div class="btn-box">
                 <button class="my-2" type="submit">Đăng nhập</button>
             </div>

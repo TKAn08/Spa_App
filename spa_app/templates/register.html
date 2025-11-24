@@ -12,12 +12,21 @@
 <!-- Form-->
 <!--Cần thử lại-->
 {% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }} flashMessage">{{ message }}</div>
-{% endfor %}
-{% endif %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} flashMessage">{{ message }}</div>
+    {% endfor %}
+
+    {% if messages | selectattr(0, "equalto", "success") | list %}
+      <script>
+        setTimeout(function() {
+          window.location.href = "{{ redirect_url }}";
+        }, 2000);
+      </script>
+    {% endif %}
+  {% endif %}
 {% endwith %}
+
 <div class="container">
     <div class="step">
         <div id="progress"></div>

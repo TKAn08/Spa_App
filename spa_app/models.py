@@ -7,6 +7,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class UserRole(RoleEnum):
     USER = 1
+    ADMIN = 2
+    CASHIER = 3
+    RECEPTIONIST = 4
+    EMPLOYEE = 5
+
 
 class Base(db.Model):
     __abstract__ = True
@@ -29,11 +34,40 @@ class User(Base, UserMixin):
     address = Column(String(150))
     phone_number = Column(String(12), nullable=False)
     role = Column(Enum(UserRole), default=UserRole.USER)
+    type = Column(String(50))  # discriminator column cho STI
+
+    admin_code = Column(String(20), nullable=True)
+    cashier_code = Column(String(20), nullable=True)
+    receptionist_code = Column(String(20), nullable=True)
+    employee_code = Column(String(20), nullable=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': type
+    }
 
     def set_hash_password(self, password):
         self.password = generate_password_hash(password)
+
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+class Admin(User):
+    __mapper_args__ = {'polymorphic_identity': 'admin'}
+
+class Cashier(User):
+    __mapper_args__ = {'polymorphic_identity': 'cashier'}
+
+class Receptionist(User):
+    __mapper_args__ = {'polymorphic_identity': 'receptionist'}
+
+class Employee(User):
+    __mapper_args__ = {'polymorphic_identity': 'employee'}
+
+
+# class Service(Base):
+#     __tablename__ = 'service'
+
 
 if __name__ == '__main__':
     with app.app_context():

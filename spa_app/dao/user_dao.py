@@ -1,17 +1,19 @@
-from flask import flash
-
 from spa_app import db
 from spa_app.models import User
+
+#file này chứa giao diện người dùng
 
 def add_user(user: User):
     try:
         db.session.add(user)
         db.session.commit()
-        return True
+        return True, None
     except Exception as e:
         db.session.rollback()
-        flash(f"Lỗi khi đăng ký: {str(e)}")
-        return False
+        return False, str(e)
+
+def get_user_by_id(user_id):
+    return User.query.get(user_id)
 
 def auth_user(username, password):
     checkingUser = User.query.filter(User.username==username).first()
@@ -19,5 +21,3 @@ def auth_user(username, password):
         return checkingUser
     return None
 
-def get_user_by_id(user_id):
-    return User.query.get(user_id)

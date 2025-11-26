@@ -1,5 +1,5 @@
 from datetime import datetime
-from spa_app import db, app
+from spa_app import db
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum
 from flask_login import UserMixin
 from enum import Enum as RoleEnum
@@ -70,8 +70,7 @@ class Employee(User):
 
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
+    db.create_all()
 
         # user = User(
         #     first_name="An",

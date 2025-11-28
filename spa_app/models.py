@@ -1,9 +1,14 @@
 from datetime import datetime
+
+from sqlalchemy.orm import relationship
+
 from spa_app import db
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, ForeignKey, Float
 from flask_login import UserMixin
 from enum import Enum as RoleEnum
 from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 class UserRole(RoleEnum):
     USER = 1
@@ -16,14 +21,13 @@ class UserRole(RoleEnum):
 class Base(db.Model):
     __abstract__ = True
     id = Column(Integer, primary_key=True, autoincrement=True)
-    first_name = Column(String(150), nullable=False)
-    last_name = Column(String(150), nullable=False)
+    name = Column(String(150), nullable=False)
     active = Column(Boolean, default=True)
     created_date = Column(DateTime, default=datetime.now)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
+# User
 class User(Base, UserMixin):
     __tablename__ = 'user'
     __table_args__ = {'extend_existing': True}
@@ -64,19 +68,21 @@ class Receptionist(User):
 class Employee(User):
     __mapper_args__ = {'polymorphic_identity': 'employee'}
 
+# Service
+class Service(Base):
+    __tablename__ = 'service'
+    __table_args__ = {'extend_existing': True}
+    image = Column(String(255), default='https://www.google.com.vn/url?sa=i&url=http%3A%2F%2Fthcstayson.pgdtpthaibinh.edu.vn%2Ftin-tuc-su-kien%2Ftin-tuc-tu-phong&psig=AOvVaw1RuqyQiOTlnTHTAROeCIfp&ust=1764385343136000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCPC-yt3tk5EDFQAAAAAdAAAAABAL')
+    price = Column(Float)
+    duration = Column(Integer)
+    category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
+    description = Column(db.Text)
 
-# class Service(Base):
-#     __tablename__ = 'service'
+class Category(Base):
+    __tablename__ = 'category'
+    __table_args__ = {'extend_existing': True}
+    description = Column(db.Text)
+    services = relationship('Service', backref='category', lazy=True)
 
 
-if __name__ == '__main__':
-    db.create_all()
 
-        # user = User(
-        #     first_name="An",
-        #     last_name="Trần Khánh",
-        #     username="bivatai123",
-        #     password="35715982"
-        # )
-        # db.session.add(user)
-        # db.session.commit()

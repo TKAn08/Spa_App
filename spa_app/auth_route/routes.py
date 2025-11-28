@@ -16,7 +16,6 @@ def login_view():
         username = request.form.get('username')
         password = request.form.get('password')
         currentUser = user_dao.auth_user(username, password)
-        print(currentUser)
         if (currentUser):
             login_user(currentUser)
             return redirect("/")
@@ -61,15 +60,14 @@ def register_view():
         DOB = None
         if (DOB_str):
             DOB = datetime.strptime(DOB_str, "%Y-%m-%d")
-
+        name = firstName + " " + lastName
         new_user = User(
             username=username,
             gender=gender,
             DOB=DOB,
             address=address,
             phone_number=phoneNumber,
-            first_name=firstName,
-            last_name=lastName
+            name = name
         )
         new_user.set_hash_password(password)
 

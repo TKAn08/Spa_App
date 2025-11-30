@@ -1,5 +1,5 @@
 from spa_app import create_app, db
-from spa_app.models import Admin, UserRole
+from spa_app.models import Admin, UserRole, User
 
 app = create_app()
 if __name__ == '__main__':
@@ -11,8 +11,14 @@ if __name__ == '__main__':
     #         role=UserRole.ADMIN
     #     )
     #     admin.set_hash_password("123456")
-    #     db.session.add(admin)
-    #     db.session.commit()
-        db.create_all()
+        user = User(
+            name="Nguyễn Văn B",
+            username="user",
+            phone_number="0123456789",
+        )
+        user.set_hash_password('123456')
+        db.session.add(user)
+        db.session.commit()
+        # db.create_all()
 
 

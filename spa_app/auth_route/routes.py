@@ -1,13 +1,15 @@
 from datetime import datetime
-from spa_app.models import User
+from spa_app.models import User, UserRole
 from flask import render_template, request, redirect, flash, Blueprint
 from flask_login import current_user, login_user, logout_user
 from spa_app.dao import user_dao
+from spa_app.auth_route.auth_handler import handler_login_view
 
 # file này chứa các route đăng nhập, đăng ký của người dùng
-auth_bp = Blueprint('auth_bp', __name__)
+main_auth_bp = Blueprint('auth_bp', __name__)
+admin_bp = Blueprint('admin_bp', __name__)
 
-@auth_bp.route('/login', methods=['GET', 'POST'])
+@main_auth_bp.route('/login', methods=['GET', 'POST'])
 def login_view():
     if current_user.is_authenticated:
         return redirect("/")
@@ -23,7 +25,7 @@ def login_view():
             error_message = "Tài khoản hoặc mật khẩu không đúng!"
     return render_template('login.html', error_message=error_message)
 
-@auth_bp.route('/register', methods=['GET', 'POST'])
+@main_auth_bp.route('/register', methods=['GET', 'POST'])
 def register_view():
     if current_user.is_authenticated:
         return redirect("/")
@@ -79,8 +81,13 @@ def register_view():
 
     return render_template('register.html')
 
-@auth_bp.route("/logout")
+@main_auth_bp.route("/logout")
 def logout_my_user():
     logout_user()
     return redirect("/login")
+
+@admin_bp.route("/admin-login", methods=['GET', 'POST'])
+def admin_login_view():
+    return handler_login_view("admin/admin-login.html")
+
 

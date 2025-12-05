@@ -11,11 +11,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class UserRole(RoleEnum):
-    USER = 1
-    ADMIN = 2
-    CASHIER = 3
-    RECEPTIONIST = 4
-    EMPLOYEE = 5
+    USER = "user"
+    ADMIN = "admin"
+    CASHIER = "cashier"
+    RECEPTIONIST = "receptionist"
+    EMPLOYEE = "employee"
 
 
 class Base(db.Model):
@@ -59,14 +59,27 @@ class User(Base, UserMixin):
 class Admin(User):
     __mapper_args__ = {'polymorphic_identity': 'admin'}
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.role = UserRole.ADMIN
+
 class Cashier(User):
     __mapper_args__ = {'polymorphic_identity': 'cashier'}
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.role = UserRole.CASHIER
 
 class Receptionist(User):
     __mapper_args__ = {'polymorphic_identity': 'receptionist'}
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.role = UserRole.RECEPTIONIST
 
 class Employee(User):
     __mapper_args__ = {'polymorphic_identity': 'employee'}
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.role = UserRole.EMPLOYEE
 
 # Service
 class Service(Base):

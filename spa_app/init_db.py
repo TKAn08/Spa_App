@@ -22,6 +22,7 @@ if __name__ == '__main__':
             username="user",
             phone_number="0123456789",
         )
+
         user.set_hash_password('123456')
         db.session.add(user)
         db.session.commit()

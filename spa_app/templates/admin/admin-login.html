@@ -13,21 +13,27 @@
     <title>Đăng nhập</title>
 </head>
 <body>
-    {% if error_message%}
-    <div class="alert alert-danger">{{error_message}}</div>
-    {% endif %}
-    <div class="container">
-        <form action="/admin-login" id="form-login" method="post">
-            <h1>Trang đăng nhập quản trị viên</h1>
-            <input name="username" type="text" placeholder="Tên đăng nhập" required>
-            <input name="password" type="password" placeholder="Mật khẩu" required>
-            <div class="btn-box">
-                <a href="/">
-                    <button class="btn" type="button">Quay về trang chủ</button>
-                </a>
-                <button class="my-2" type="submit">Đăng nhập</button>
-            </div>
-        </form>
-    </div>
+{% if error_message%}
+<div class="alert alert-danger flashMessage">{{error_message}}</div>
+{% endif %}
+
+<div class="container">
+    <form action="/admin-login" id="form-login-admin" method="post">
+
+        <h2>Trang đăng nhập quản trị viên</h2>
+        <input name="username" type="text" placeholder="Tên đăng nhập" required>
+        <input name="password" type="password" placeholder="Mật khẩu" required>
+        <select name="role" required>
+            <option value="admin">Admin</option>
+            <option value="cashier">Cashier</option>
+        </select>
+        <div class="btn-box">
+            <a href="/">
+                <button class="btn" type="button">Quay về trang chủ</button>
+            </a>
+            <button class="my-2" type="submit">Đăng nhập</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>

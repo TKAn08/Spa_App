@@ -13,9 +13,9 @@
 
 body {
     background: linear-gradient(30deg, #2980B9, #6DD5FA, #FFFFFF);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
     min-height: 100vh;
 }
 
@@ -26,7 +26,7 @@ body {
 .container {
     width: var(--container-width);
     height: var(--container-height);
-    /* margin: 8% auto; */
+    margin: calc(var(--container-height) / 4) auto;
     background: linear-gradient(45deg, #C9D6FF, #E2E2E2);
     border-radius: 10px;
     position: relative;
@@ -54,6 +54,29 @@ h2 {
     top: calc(var(--container-height) / 8.5);
     left: calc(var(--container-width) /11);
     overflow: hidden; /* hoặc visible tùy bạn */
+}
+
+#form-login-admin {
+    position: relative;
+    height: 100%;
+    top:0;
+    padding-top: 1.2rem;
+}
+
+#form-login-admin select {
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px 5px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #999;
+    outline: none;
+}
+
+.flashMessage {
+    positon: absolute;
+    width: 100%;
+
 }
 
 .container form div[id^="form"] {

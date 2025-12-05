@@ -1,7 +1,12 @@
+from flask_login import current_user, login_required
+
 from spa_app import create_app
 app = create_app()
 
-# file chạy chính
+@app.route("/whoami")
+@login_required  # chỉ cho phép user đã login
+def whoami():
+    return f"User hiện tại: {current_user.username}, Role: {current_user.role.name}"
 
 if __name__ == '__main__':
     with app.app_context():

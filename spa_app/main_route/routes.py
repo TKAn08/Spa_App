@@ -8,3 +8,8 @@ main_bp = Blueprint('main_bp', __name__)
 def index():
     services = services_dao.load_services_for_main_page()
     return render_template('index.html',services = services)
+
+@main_bp.route('/service', methods=['GET', 'POST'])
+def services_view():
+    services = services_dao.load_services()
+    return render_template('services/services.html', services = services)

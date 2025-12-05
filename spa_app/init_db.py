@@ -1,5 +1,6 @@
 from spa_app import create_app, db
-from spa_app.models import Admin, UserRole, User
+from spa_app.models import Admin, UserRole, Service, Category, User
+import json
 
 app = create_app()
 if __name__ == '__main__':
@@ -11,6 +12,11 @@ if __name__ == '__main__':
     #         role=UserRole.ADMIN
     #     )
     #     admin.set_hash_password("123456")
+    with open("data/services.json", encoding="utf-8") as b:
+        services = json.load(b)
+
+        for s in services:
+            db.session.add(Service(**s))
         user = User(
             name="Nguyễn Văn B",
             username="user",
@@ -20,5 +26,7 @@ if __name__ == '__main__':
         db.session.add(user)
         db.session.commit()
         # db.create_all()
+
+
 
 

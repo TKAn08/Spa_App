@@ -19,22 +19,57 @@
                 </li>
             </ul>
             <div class="d-flex gap-3">
+                {% if current_user.is_authenticated %}
                 <a href="/order">
                     <button type="button" class="btn btn-primary">Đặt lịch ngay</button>
                 </a>
-                {% if current_user.is_authenticated %}
-                <span>Chào</span>
-                <a href="#" >
-                    <button type="button" class="btn btn-dark">
-                        {{current_user.first_name}} {{current_user.last_name}}
-                    </button>
-                </a>
-                <a href="/logout">
-                    <button type="button" class="btn">Đăng xuất</button>
-                </a>
+                <div class="dropdown">
+                    <a href="#" class="d-block" id="avatarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-success border-success border-2">
+                            <img src="https://via.placeholder.com/50" alt="Avatar" class="rounded-circle">
+                            <strong>{{current_user.name}}</strong>
+                        </button>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end text-start" aria-labelledby="avatarDropdown">
+                        <li class="px-3 py-2">
+                            <i class="fas fa-address-card mr-1 me-1"></i>
+                            Họ và tên: <b>{{current_user.name}}</b>
+                        </li>
+                        <li class="px-3 py-2">
+                            <i  class="far fa-id-card mr-1 me-1"></i>
+                            Tên tài khoản: <b>{{current_user.username}}</b>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/{{ current_user.username }}?tab=information">
+                                <i  class="fas fa-user mr-2 me-1"></i>
+                                Thông tin cá nhân
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i  class="fas fa-unlock mr-2 me-1"></i>
+                                Đổi mật khẩu
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                <i class="fas fa-sign-out-alt mr-2 me-1"></i>
+                                Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 {% else %}
+                <a href="/login?next=/order">
+                    <button type="button" class="btn btn-primary">Đặt lịch ngay</button>
+                </a>
                 <a href="/login">
-                    <button type="button " class="btn btn-dark">Đăng nhập</button>
+                    <button type="button " class="btn btn-success border-success border-2">Đăng nhập</button>
                 </a>
                 {% endif %}
             </div>

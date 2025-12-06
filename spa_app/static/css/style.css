@@ -18,7 +18,7 @@ a.navbar-homepage {
 .navbar button {
     font-size: 1.2rem;
     border: 2px solid darkgray;
-    border-radius: 5px;
+    border-radius: 15px;
     margin: 5px;
     color: white;
 }
@@ -42,4 +42,25 @@ a.navbar-homepage {
 
 .btnHover:hover {
     filter: brightness(0.85);
+}
+
+#avatarDropdown {
+    text-decoration: none; /* xóa gạch chân */
+    padding: 0;
+    color: white;
+}
+
+#avatarDropdown button {
+    display: inline-block;
+    font-size: 1.2rem;
+    border: none;
+    margin: 5px;
+}
+
+/* Thu nhỏ avatar */
+#avatarDropdown img {
+    width: 40px; /* giảm kích thước */
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }

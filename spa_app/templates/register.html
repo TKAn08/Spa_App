@@ -20,7 +20,7 @@
     {% if messages | selectattr(0, "equalto", "success") | list %}
       <script>
         setTimeout(function() {
-          window.location.href = "{{ redirect_url }}";
+          window.location.href = "/login";
         }, 2000);
       </script>
     {% endif %}

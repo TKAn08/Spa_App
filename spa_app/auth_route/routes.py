@@ -1,5 +1,5 @@
 from datetime import datetime
-from spa_app.models import User, UserRole
+from spa_app.models import User
 from flask import render_template, request, redirect, flash, Blueprint
 from flask_login import current_user, login_user, logout_user
 from spa_app.dao import user_dao
@@ -13,6 +13,7 @@ admin_bp = Blueprint('admin_bp', __name__)
 def login_view():
     if current_user.is_authenticated:
         return redirect("/")
+    next_url = request.args.get('next')
     error_message = None
     if request.method == 'POST':
         username = request.form.get('username')
@@ -20,10 +21,10 @@ def login_view():
         currentUser = user_dao.auth_user(username, password)
         if (currentUser):
             login_user(currentUser)
-            return redirect("/")
+            return redirect(next_url or "/")
         else:
             error_message = "Tài khoản hoặc mật khẩu không đúng!"
-    return render_template('login.html', error_message=error_message)
+    return render_template('login.html', error_message=error_message, next_url=next_url)
 
 @main_auth_bp.route('/register', methods=['GET', 'POST'])
 def register_view():

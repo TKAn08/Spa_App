@@ -25,8 +25,6 @@ class Base(db.Model):
     active = Column(Boolean, default=True)
     created_date = Column(DateTime, default=datetime.now)
 
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
 # User
 class User(Base, UserMixin):
     __tablename__ = 'user'

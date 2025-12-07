@@ -12,24 +12,24 @@ if __name__ == '__main__':
     #         role=UserRole.ADMIN
     #     )
     #     admin.set_hash_password("123456")
-        with open("data/services.json", encoding="utf-8") as b:
-            services = json.load(b)
-
-            for s in services:
-                db.session.add(Service(**s))
+    #     with open("data/services.json", encoding="utf-8") as b:
+    #         services = json.load(b)
+    #
+    #         for s in services:
+    #             db.session.add(Service(**s))
         # user = User(
         #     name="Nguyễn Văn B",
         #     username="user",
         #     phone_number="0123456789",
         # )
-        with open("data/categories.json", encoding="utf-8") as f:
-            categories = json.load(f)
-            for c in categories:
-                db.session.add(Category(**c))
-        # user.set_hash_password('123456')
+        # with open("data/categories.json", encoding="utf-8") as f:
+        #     categories = json.load(f)
+        #     for c in categories:
+        #         db.session.add(Category(**c))
+        # # user.set_hash_password('123456')
         # db.session.add(user)
         db.session.commit()
-        # db.create_all()
+        db.create_all()
 
 
 

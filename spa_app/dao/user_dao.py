@@ -1,6 +1,6 @@
 from spa_app import db
 from spa_app.models import User
-
+from datetime import date, datetime
 #file này chứa giao diện người dùng
 
 def add_user(user: User):
@@ -21,3 +21,15 @@ def auth_user(username, password):
         return checkingUser
     return None
 
+def get_age_user(dob):
+    if (isinstance(dob, datetime)):
+        dob = dob.date()
+    today = date.today()
+    return (
+        today.year - dob.year -
+        ((today.month, today.day) < (dob.month, dob.day))
+    )
+
+def change_password(user, new_password):
+    user.set_hash_password(new_password)
+    db.session.commit()

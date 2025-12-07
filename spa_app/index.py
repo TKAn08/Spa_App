@@ -6,6 +6,7 @@ app = create_app()
 @app.route("/whoami")
 @login_required  # chỉ cho phép user đã login
 def whoami():
+    print(current_user.DOB, type(current_user.DOB))
     return f"User hiện tại: {current_user.username}, Role: {current_user.role.name}"
 
 if __name__ == '__main__':

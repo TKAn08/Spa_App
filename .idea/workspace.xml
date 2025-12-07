@@ -5,22 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="78581bbf-293f-492d-bc45-004162588213" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/spa_app/data/users.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spa_app/static/css/information.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spa_app/templates/information-user/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spa_app/templates/information-user/change-password.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spa_app/templates/information-user/information.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spa_app/templates/order.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/auth_route/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/auth_route/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/dao/user_dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/dao/user_dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/index.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/init_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/init_db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spa_app/main_route/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/main_route/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/templates/layout/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/layout/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/templates/services/services.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/services/services.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/templates/information-user/change-password.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/information-user/change-password.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/templates/information-user/information.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/information-user/information.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

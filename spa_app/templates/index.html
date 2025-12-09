@@ -12,20 +12,21 @@
         <a href="/order">
             <button class="btn btnColor btnHover px-4 py-2">
                 <i class="fa-solid fa-calendar-days me-2"></i>
-                Đặt lịch hẹn
+                <span class="fw-bold">Đặt lịch hẹn</span>
             </button>
         </a>
         {% else %}
         <a href="/login?next=/order">
             <button class="btn btnColor btnHover px-4 py-2">
                 <i class="fa-solid fa-calendar-days me-2"></i>
-                Đặt lịch hẹn
+                <span class="fw-bold">Đặt lịch hẹn</span>
             </button>
         </a>
         {% endif %}
-        <a href="service">
+        <a href="/service">
             <button class="btn btnHover btn-light px-4 py-2 border rounded-3">
-                Xem dịch vụ <i class="fa-solid fa-chevron-right ms-1"></i>
+                <i class="fa-solid fa-chevron-right me-1"></i>
+                <span class="fw-bold">Xem dịch vụ</span>
             </button>
         </a>
 
@@ -33,7 +34,7 @@
     </div>
 </div>
 
-<div class="py-5 text-center bg-white">
+<div class="p-3 text-center bg-white">
     <div class="fw-bold fs-3 mb-2">Tại sao chọn Beauty Spa?</div>
     <div class="text-muted mb-5">Chúng tôi cam kết mang đến trải nghiệm tốt nhất</div>
 
@@ -91,42 +92,15 @@
     </div>
 </div>
 
-<div class="py-5 text-center bgColor my-5">
+<div class="py-5 text-center bgColor my-5 p-3">
     <h1 class="fw-bold mb-3">Các dịch vụ nổi bật</h1>
-    <p class="fs-5 mb-4">
-        Danh sách các dịch vụ
-    </p>
+    <h3 class="mb-4">Danh sách các dịch vụ</h3>
     <div class="row g-4">
         {% for s in services %}
-        <!-- Card -->
-        <div class="col-md-4 d-flex">
-            <div class="card shadow-sm rounded-4">
-                <img class="card-img-top" src="{{s.image}}" alt="{{s.name}}">
-
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title fw-bold">{{ s.name }}</h5>
-
-                    <p class="text-muted small mb-2 flex-grow-1">
-                        {{ s.description }}
-                    </p>
-
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="fw-bold text-primary fs-5">
-                            {{ "{:,}".format(s.price) }} đ
-                        </span>
-                        <span class="text-warning">⭐ 5.0</span>
-                    </div>
-                    <button class="btn btn-primary w-100 rounded-3 mt-auto">
-                        Đặt lịch ngay
-                    </button>
-                </div>
-
-            </div>
-
-        </div>
+        {% include 'services/card.html' %}
         {%endfor%}
         <a href="/service">
-            <button class="btn btn-dark">Xem tất cả các dịch vụ</button>
+            <button class="btn btn-dark p-4">Xem tất cả các dịch vụ</button>
         </a>
     </div>
 

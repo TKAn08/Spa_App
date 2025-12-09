@@ -1,45 +1,38 @@
-{%extends 'layout/base.html'%}
+{% extends 'layout/base.html' %}
 {%block title%}Dịch vụ{%endblock%}
 {%block content%}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<div class="container py-5">
+
+<div class="container py-3">
+    <div class="container my-4">
+
+        <h1 class="pb-3">Các loại dịch vụ</h1>
+
+        <div class="d-flex flex-wrap gap-3">
+
+            <a href="/service" style="width: 24%">
+                <button class="btn btn-outline-primary w-100 py-3">Tất cả dịch vụ</button>
+            </a>
+
+            {% for cate in categories %}
+            <a href="/service?cate_id={{cate.id}}" style="width: 24%">
+                <button class="btn btn-outline-primary w-100 py-3">{{ cate.name }}</button>
+            </a>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center">
+        {% include 'services/paginate.html' %}
+    </div>
+
     <div class="row g-4">
         {% for s in services %}
         <!-- Card -->
-        <div class="col-md-4 d-flex">
-            <div class="card shadow-sm rounded-4">
-                <img class="card-img-top" src="{{s.image}}" alt="{{s.name}}">
-
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title fw-bold">{{ s.name }}</h5>
-
-                    <p class="text-muted small mb-2 flex-grow-1">
-                        {{ s.description }}
-                    </p>
-
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="fw-bold text-primary fs-5">
-            {{ "{:,}".format(s.price) }} đ
-          </span>
-                        <span class="text-warning">⭐ 5.0</span>
-                    </div>
-                    {% if current_user.is_authenticated %}
-                    <a href="/order">
-                        <button class="btn btn-primary w-100 rounded-3 mt-auto">
-                            Đặt lịch ngay
-                        </button>
-                    </a>
-                    {% else %}
-                    <a href="/login">
-                        <button class="btn btn-primary w-100 rounded-3 mt-auto">
-                            Đặt lịch ngay
-                        </button>
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+        {% include 'services/card.html' %}
         {%endfor%}
     </div>
 </div>

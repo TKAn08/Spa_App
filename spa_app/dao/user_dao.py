@@ -22,6 +22,8 @@ def auth_user(username, password):
     return None
 
 def get_age_user(dob):
+    if dob is None:
+        return None
     if (isinstance(dob, datetime)):
         dob = dob.date()
     today = date.today()
@@ -32,4 +34,12 @@ def get_age_user(dob):
 
 def change_password(user, new_password):
     user.set_hash_password(new_password)
+    db.session.commit()
+
+def change_information(user, name, gender, dob, address, phone_number):
+    user.name = name
+    user.gender = gender
+    user.dob = dob
+    user.address = address
+    user.phone_number = phone_number
     db.session.commit()

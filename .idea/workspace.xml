@@ -5,13 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="78581bbf-293f-492d-bc45-004162588213" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/spa_app/static/javascript/model.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/spa_app/templates/services/card.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/spa_app/templates/services/paginate.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/dao/services_dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/dao/services_dao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spa_app/dao/user_dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/dao/user_dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/data/categories.json" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/data/categories.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/data/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/data/users.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spa_app/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/index.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spa_app/init_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/init_db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spa_app/main_route/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/main_route/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_app/templates/information-user/change-password.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/information-user/change-password.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/static/login/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/static/javascript/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spa_app/templates/information-user/information.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/information-user/information.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/templates/layout/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/layout/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/templates/order.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spa_app/templates/services/services.html" beforeDir="false" afterPath="$PROJECT_DIR$/spa_app/templates/services/services.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,9 +34,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="CSS File" />
         <option value="HTML File" />
+        <option value="Python Script" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -58,6 +72,12 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\spa_app\spa_app\static\javascript" />
+      <recent name="C:\spa_app\spa_app\static" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.index">
     <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Spa_App" />
@@ -149,5 +169,16 @@
       <updated>1764395779577</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/spa_app/main_route/routes.py</url>
+          <line>26</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

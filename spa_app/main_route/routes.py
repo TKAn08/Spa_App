@@ -1,7 +1,6 @@
-from flask import render_template, Blueprint, request, redirect
+from flask import render_template, Blueprint, request, redirect, session
 from flask_login import login_required, current_user, login_manager
-from sqlalchemy.sql.functions import user
-
+import math
 from spa_app.dao.user_dao import get_age_user, change_password
 from spa_app.dao import services_dao, user_dao
 
@@ -15,8 +14,13 @@ def index():
 
 @main_bp.route('/service', methods=['GET', 'POST'])
 def services_view():
-    services = services_dao.load_services()
-    return render_template('services/services.html', services = services)
+    page = request.args.get('page', 1, type=int)
+    cate_id = request.args.get('cate_id', 1, type=int)
+    services = services_dao.load_services(page=page, cate_id=cate_id)
+    categories = services_dao.load_categories()
+    pages = math.ceil(services_dao.count_services(cate_id) / services_dao.count_services_per_page())
+    return render_template('services/services.html', services = services,
+                           pages = pages, current_page = page, categories = categories)
 
 
 @main_bp.route('/<username>', methods=['GET', 'POST'])
@@ -28,15 +32,26 @@ def user_profile(username):
     message = None
 
     if tab == 'change_password' and request.method == 'POST':
-        old_password = request.form.get('old-password')
-        new_password = request.form.get('new-password')
-        confirm = request.form.get('confirm_new-password')
+        old_password = request.form.get('old-password') or None
+        new_password = request.form.get('new-password') or None
+        confirm = request.form.get('confirm_new-password') or None
         if not current_user.check_password(old_password):
             message = "Mật khẩu hiện tại không đúng !"
         elif new_password != confirm:
             message = "Mật khẩu không khớp !"
         else:
             user_dao.change_password(current_user, new_password)
+            session['update_success'] = True
+
+    if tab == 'information' and request.method == 'POST':
+        name = request.form.get('name')
+        gender = request.form.get('gender')
+        dob = request.form.get('dob')
+        address = request.form.get('address')
+        phone_number = request.form.get('phone-number')
+        user_dao.change_information(current_user, name, gender, dob, address, phone_number)
+
+        session['update_success'] = True
 
 
     if tab == 'change_password':

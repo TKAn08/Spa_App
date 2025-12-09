@@ -1,6 +1,21 @@
 [
   {
     "id" : 1,
-    "name" : "placeholder"
+    "name" : "Chăm sóc da mặt"
+  },
+
+  {
+    "id": 2,
+    "name": "Massage thư giãn"
+  },
+
+  {
+    "id": 3,
+    "name": "Tắm trắng"
+  },
+
+  {
+    "id": 4,
+    "name": "Nail"
   }
 ]

@@ -13,11 +13,11 @@
     <title>Đăng nhập</title>
 </head>
 <body>
-
+    {% if error_message%}
+    <div class="alert alert-danger">{{error_message}}</div>
+    {% endif %}
     <div class="container">
-        {% if error_message%}
-        <div class="alert alert-danger">{{error_message}}</div>
-        {% endif %}
+
 
         <form action="/login{% if next_url %}?next={{ next_url }} {% endif %}"
               id="form-login"
@@ -29,7 +29,7 @@
             <div class="btn-box">
                 <button class="my-2" type="submit">Đăng nhập</button>
             </div>
-            <div class="text-center">Chưa có tài khoản đăng ký <a href="/register">Tại đây</a></div>
+            <div class="text-center fw-bold ">Chưa có tài khoản đăng ký <a href="/register">Tại đây</a></div>
         </form>
     </div>
 </body>

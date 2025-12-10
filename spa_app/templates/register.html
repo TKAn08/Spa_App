@@ -4,30 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
     <title>Đăng ký</title>
 </head>
 
 <body>
-<!-- Form-->
-<!--Cần thử lại-->
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }} flashMessage">{{ message }}</div>
-    {% endfor %}
-
-    {% if messages | selectattr(0, "equalto", "success") | list %}
-      <script>
-        setTimeout(function() {
-          window.location.href = "/login";
-        }, 2000);
-      </script>
-    {% endif %}
-  {% endif %}
+{% if messages %}
+{% for category, msg in messages %}
+<div class="alert alert-{{ category }} mt-2 flash-message" id="flash-msg">
+    {{ msg }}
+</div>
+{% endfor %}
+{% endif %}
 {% endwith %}
 
-<div class="container">
+
+<div class="container-register">
     <div class="step">
         <div id="progress"></div>
         <div class="step-col"><small>Bước 1</small></div>
@@ -37,48 +35,69 @@
 
     <form id="registerForm" action="/register" method="POST">
         <h2>Đăng ký</h2>
+
+        <!-- FORM 1 -->
         <div id="form1">
-            <input type="text" name="username" placeholder="Tên đăng nhập">
+            <input type="text" name="username" placeholder="Tên đăng nhập"
+                   value="{{ saved_data.username or '' }}">
             <input type="password" name="password" placeholder="Mật khẩu">
             <input type="password" name="confirm_password" placeholder="Nhập lại mật khẩu">
             <div class="error-text"></div>
+
             <div class="btn-box">
                 <button type="button" id="next1">Next</button>
             </div>
+            <div class="fw-bold text-center">
+                <span>Quay lại trang đăng nhập</span>
+                <a href="/login">Tại đây</a>
+            </div>
+
         </div>
 
+        <!-- FORM 2 -->
         <div id="form2">
             <div id="gender-box">
                 <label for="gender">Giới tính</label>
                 <select name="gender" id="gender" class="form-select">
                     <option value="" disabled selected>Chọn giới tính</option>
-                    <option value="Nam">Nam</option>
-                    <option value="Nữ">Nữ</option>
-                    <option value="Khác">Khác</option>
+                    <option value="Nam" {% if saved_data.gender==
+                    'Nam' %}selected{% endif %}>Nam</option>
+                    <option value="Nữ" {% if saved_data.gender==
+                    'Nữ' %}selected{% endif %}>Nữ</option>
+                    <option value="Khác" {% if saved_data.gender==
+                    'Khác' %}selected{% endif %}>Khác</option>
                 </select>
             </div>
-            <input type="date" name="dob" placeholder="Ngày sinh">
-            <input type="text" name="address" placeholder="Địa chỉ">
+
+            <input type="date" name="dob" value="{{ saved_data.dob or '' }}">
+            <input type="text" name="address" placeholder="Địa chỉ"
+                   value="{{ saved_data.address or '' }}">
+
             <div class="btn-box">
                 <button type="button" id="back1">Back</button>
                 <button type="button" id="next2">Next</button>
             </div>
         </div>
 
+        <!-- FORM 3 -->
         <div id="form3">
-            <input type="text" name="first_name" placeholder="Họ">
-            <input type="text" name="last_name" placeholder="Tên">
-            <input type="text" name="phone_number" placeholder="Số điện thoại">
+            <input type="text" name="first_name" placeholder="Họ"
+                   value="{{ saved_data.first_name or '' }}">
+            <input type="text" name="last_name" placeholder="Tên"
+                   value="{{ saved_data.last_name or '' }}">
+            <input type="text" name="phone_number" placeholder="Số điện thoại"
+                   value="{{ saved_data.phone_number or '' }}">
+
             <div class="btn-box">
                 <button type="button" id="back2">Back</button>
                 <button type="submit">Submit</button>
             </div>
         </div>
-
-
     </form>
-
 </div>
-<script src="../static/javascript/login.js"></script>
+
+<script src="{{ url_for('static', filename='javascript/login.js') }}"></script>
 </body>
+
+
 </html>

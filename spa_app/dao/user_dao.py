@@ -39,7 +39,7 @@ def change_password(user, new_password):
 def change_information(user, name, gender, dob, address, phone_number):
     user.name = name
     user.gender = gender
-    user.dob = dob
+    user.DOB = dob
     user.address = address
     user.phone_number = phone_number
     db.session.commit()

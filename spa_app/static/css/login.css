@@ -3,6 +3,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     font-family: 'Ubuntu';
 }
 
@@ -11,12 +12,22 @@
     --container-height: 400px;
 }
 
+
+
 body {
     background: linear-gradient(30deg, #2980B9, #6DD5FA, #FFFFFF);
 /*    display: flex;*/
 /*    align-items: center;*/
 /*    justify-content: center;*/
     min-height: 100vh;
+}
+
+.flash-message {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
 }
 
 .text-center {
@@ -38,13 +49,6 @@ body {
 h1 {
     text-align: center;
     margin-bottom: 10px;
-}
-
-/* Form Register */
-h2 {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #777;
 }
 
 .container form {
@@ -73,25 +77,13 @@ h2 {
     outline: none;
 }
 
-.flashMessage {
-    positon: absolute;
-    width: 100%;
 
-}
 
 .container form div[id^="form"] {
     position: absolute;
     transition: 0.5s;
     height: 100%;
     width: 100%;
-}
-
-.container form div#form2 {
-    left: 550px;
-}
-
-.container form div#form3 {
-    left: 550px;
 }
 
 form input {
@@ -134,55 +126,6 @@ form .btn-box button {
     font-size: 0.8em;
 }
 
-.step {
-    width: 100%;
-    height: calc(var(--container-height) / 8);
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 -1px 5px -1px #000;
-    position: relative;
-}
-
-.step-col {
-    width: calc(var(--container-width) / 3);
-    text-align: center;
-    color: #333;
-    position: relative;
-}
-
-#progress {
-    position: absolute;
-    height: 100%;
-    width: calc(var(--container-width) / 3);
-    background: linear-gradient(to right, #1565c0, #1976d2);
-}
-
-small {
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.8em;
-}
-
-div.error-text {
-    display: none;
-    color: red;
-    text-align: center;
-    margin: 5px 0;
-    font-size: 1.2rem;
-}
-
-#progress::after {
-    content: '';
-    height: 0;
-    width: 0;
-    border-top: calc(var(--container-height) / 16) solid transparent;
-    border-bottom: calc(var(--container-height) / 16) solid transparent;
-    position: absolute;
-    right: calc(var(--container-height) / -16.1);
-    top: 0;
-    border-left: calc(var(--container-height) / 16) solid #1976d2;
-}
 
 @media only screen and (max-width: 480px) {
     .btn-box {

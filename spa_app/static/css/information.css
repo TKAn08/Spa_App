@@ -23,3 +23,9 @@ body {
     background-color: #007bff;
     color: white;
 }
+
+.flash-message {
+    positon: absolute;
+    width: 100%;
+}
+

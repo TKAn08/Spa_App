@@ -14,6 +14,8 @@ if __name__ == '__main__':
     #         role=UserRole.ADMIN
     #     )
     #     admin.set_hash_password("123456")
+        db.create_all()
+
         with open("data/services.json", encoding="utf-8") as b:
             services = json.load(b)
 
@@ -34,7 +36,6 @@ if __name__ == '__main__':
             # user.set_hash_password('123456')
         # db.session.add(user)
         db.session.commit()
-        db.create_all()
 
 
 

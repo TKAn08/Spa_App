@@ -73,11 +73,23 @@ registerForm.addEventListener("submit", function (e) {
     }
 });
 
-window.addEventListener('DOMContentLoaded', (event) => {
-    const flashes = document.querySelectorAll('.flashMessage');
-    flashes.forEach(flash => {
+document.addEventListener("DOMContentLoaded", function () {
+    const flash = document.getElementById("flash-msg");
+
+    if (!flash) return;
+
+    // Thêm class fade-out
+    flash.classList.add("fade-out");
+
+    // 1.5s đầu: làm mờ
+    setTimeout(() => {
+        flash.classList.add("hidden");
+    }, 2000);
+
+    // Nếu là đăng ký thành công thì 3s sau redirect
+    if (flash.innerText.includes("Đăng ký thành công")) {
         setTimeout(() => {
-            flash.style.display = 'none';
-        }, 3000); // 3 giây
-    });
+            window.location.href = "/login";
+        }, 3000);
+    }
 });

@@ -5,6 +5,7 @@
     "category_id" : 1,
     "description" : "chăm sóc da chuyên sâu tại spa và các liệu pháp thư giãn tại nhà",
     "name" : "Chăm sóc da thư giãn",
+    "outstanding": 1,
     "active" : true
   },
   {"image":  "https://misstram.edu.vn/wp-content/uploads/2019/10/nan-mun.jpg",
@@ -13,6 +14,7 @@
     "category_id" : 1,
     "description" : " làm sạch da, xông hơi để giãn nở lỗ chân lông, dùng dụng cụ đã được khử trùng để lấy nhân mụn, sau đó làm sạch da lại và đắp mặt nạ giảm sưng",
     "name" : "Nặn mụn cơ bản",
+    "outstanding": 1,
     "active" : true
   },
     {"image":  "https://edbeauty.net/wp-content/uploads/2018/03/cham-soc-phuc-hoi-da-1-898x600.jpg",
@@ -21,6 +23,7 @@
     "category_id" : 1,
     "description" : "chăm sóc da bài bản, giúp giải quyết các vấn đề từ gốc rễ",
     "name" : "Phục hồi da chuyên sâu",
+    "outstanding": 1,
     "active" : true
   },
     {"image":  "https://thammydrd.vn/wp-content/uploads/2019/01/phuc-hoi-da-chuyen-sau-bang-enzym-2.png",
@@ -29,6 +32,7 @@
     "category_id" : 1,
     "description" : "đắp mặt nạ từ các nguyên liệu tự nhiên để thanh lọc da và hỗ trợ điều trị mụn hiệu quả. ",
     "name" : "Trị mụn thanh lọc",
+    "outstanding": 1,
     "active" : true
   },
     {"image":  "https://o2skin.vn/wp-content/uploads/2024/05/lan-kim-tri-seo-ro-1.png",

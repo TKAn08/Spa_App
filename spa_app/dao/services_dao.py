@@ -2,10 +2,10 @@ from spa_app import db, create_app
 from spa_app.models import Service, Category
 from flask import current_app
 
-def load_services(q=None, cate_id=None, page=None):
+def load_services(search=None, cate_id=None, page=None):
     query = Service.query
-    if q:
-        query = query.filter(Service.name.contains(q))
+    if search:
+        query = query.filter(Service.name.contains(search))
 
     if cate_id:
         query = query.filter(Service.category_id == cate_id)
@@ -26,8 +26,9 @@ def count_services(cate_id=None):
 def count_services_per_page():
     return current_app.config["PAGE_SIZE"]
 
-def load_services_for_main_page():
-    return Service.query.limit(3).all()
 
 def load_categories():
     return Category.query.all()
+
+def get_outstanding_services():
+    return Service.query.filter(Service.outstanding).all()

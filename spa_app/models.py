@@ -35,7 +35,7 @@ class User(Base, UserMixin):
     DOB = Column(DateTime)
     address = Column(String(150))
     phone_number = Column(String(12), nullable=False)
-    image = Column(String(255), nullable=False)
+    image = Column(String(255))
     role = Column(Enum(UserRole), default=UserRole.USER)
 
     @staticmethod
@@ -100,6 +100,7 @@ class Service(Base):
     image = Column(String(255), default='https://www.google.com.vn/url?sa=i&url=http%3A%2F%2Fthcstayson.pgdtpthaibinh.edu.vn%2Ftin-tuc-su-kien%2Ftin-tuc-tu-phong&psig=AOvVaw1RuqyQiOTlnTHTAROeCIfp&ust=1764385343136000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCPC-yt3tk5EDFQAAAAAdAAAAABAL')
     price = Column(Float)
     duration = Column(Integer)
+    outstanding = Column(Boolean, default=False)
     category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
     description = Column(db.Text)
 

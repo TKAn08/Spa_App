@@ -9,14 +9,15 @@ main_bp = Blueprint('main_bp', __name__)
 
 @main_bp.route('/')
 def index():
-    services = services_dao.load_services_for_main_page()
-    return render_template('index.html',services = services)
+    outstanding_services = services_dao.get_outstanding_services()
+    return render_template('index.html', outstanding_services=outstanding_services)
 
 @main_bp.route('/service', methods=['GET', 'POST'])
 def services_view():
     page = request.args.get('page', 1, type=int)
     cate_id = request.args.get('cate_id', 1, type=int)
-    services = services_dao.load_services(page=page, cate_id=cate_id)
+    search = request.args.get('search', None, type=str)
+    services = services_dao.load_services(page=page, cate_id=cate_id, search=search)
     categories = services_dao.load_categories()
     pages = math.ceil(services_dao.count_services(cate_id) / services_dao.count_services_per_page())
     return render_template('services/services.html', services = services,

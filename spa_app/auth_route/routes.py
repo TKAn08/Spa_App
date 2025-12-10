@@ -1,6 +1,6 @@
 from datetime import datetime
 from spa_app.models import User
-from flask import render_template, request, redirect, flash, Blueprint
+from flask import render_template, request, redirect, flash, Blueprint, session
 from flask_login import current_user, login_user, logout_user
 from spa_app.dao import user_dao
 from spa_app.auth_route.auth_handler import handler_login_view
@@ -32,6 +32,9 @@ def register_view():
         return redirect("/")
 
     if request.method == 'POST':
+
+        session["reg_data"] = request.form.to_dict()
+
         username = request.form.get('username')
         password = request.form.get('password')
         confirmPassword = request.form.get('confirm_password')
@@ -45,25 +48,19 @@ def register_view():
         existing_username = User.query.filter_by(username=username).first()
         existing_phone_number = User.query.filter_by(phone_number=phoneNumber).first()
 
+        message = None
         #Kiểm tra username đã tồn tại chưa
-        if (existing_username):
-            flash("Tên đăng nhập đã tồn tại", "warning")
+        if existing_username:
+            flash("Tài khoản đã tồn tại !", "danger")
             return redirect("/register")
 
-        #Kiểm tra số điện thoại đã tồn tại chưa
-        if (existing_phone_number):
-            flash("Số điện thoại đã được đăng ký", "warning")
+        if existing_phone_number:
+            flash("Số điện thoại đã được đăng ký !", "danger")
             return redirect("/register")
 
-        # Kiểm tra password
-        if (password != confirmPassword):
-            flash("Mật khẩu không khớp", "error")
-            return redirect("/register")
-
-        DOB = None
-        if (DOB_str):
-            DOB = datetime.strptime(DOB_str, "%Y-%m-%d")
+        DOB = datetime.strptime(DOB_str, "%Y-%m-%d") if DOB_str else None
         name = firstName + " " + lastName
+
         new_user = User(
             username=username,
             gender=gender,
@@ -74,13 +71,16 @@ def register_view():
         )
         new_user.set_hash_password(password)
 
-        if (user_dao.add_user(new_user)):
-            flash("Đăng ký thành công", "success")
-            return redirect("/login")
+        if user_dao.add_user(new_user):
+            flash("Đăng ký thành công! Đang chuyển hướng sang trang đăng nhập...", "success")
+            return redirect('/register')
         else:
-            return redirect("/register")
+            flash("Đăng ký thất bại, hệ thống đang gặp lỗi !", "danger")
+            return redirect('/register')
 
-    return render_template('register.html')
+
+    saved_data = session.get("reg_data", {})
+    return render_template('register.html', saved_data=saved_data)
 
 @main_auth_bp.route("/logout")
 def logout_my_user():

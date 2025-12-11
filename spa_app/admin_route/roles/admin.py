@@ -43,9 +43,15 @@ class MyServiceView(AuthenticatedView, base.BaseServiceView):
     }
 
 class MyCategoryView(AuthenticatedView):
-    column_list = ['name', 'products']
+    column_list = ['name', 'products', 'description']
     column_searchable_list = ['name']
     column_filters = ['name']
+
+    column_labels = {
+        'name': "Tên Dịch vụ",
+        'products': 'Các dịch vụ',
+        'description': "Mô tả"
+    }
 
 class StatsView(AuthenticatedView):
     @expose('/')
@@ -63,7 +69,7 @@ def init_admin(app):
         index_view=admin_index,
         url="/admin"
     )
-    admin.add_view(MyUserView(User, db.session))
-    admin.add_view(MyCategoryView(Category, db.session))
+    admin.add_view(MyUserView(User, db.session, name="Nhân viên"))
+    admin.add_view(MyCategoryView(Category, db.session, name='Loại dịch vụ'))
     admin.add_view(MyServiceView(Service, db.session, name='Dịch vụ', endpoint='service_admin'))
     admin.add_view(BaseLogoutView("Đăng xuất", endpoint="admin_logout"))

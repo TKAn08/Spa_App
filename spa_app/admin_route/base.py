@@ -10,7 +10,7 @@ class BaseAuthenticatedView(ModelView):
     def inaccessible_callback(self, name, **kwargs):
         # Chỉ redirect nếu chưa login
         if not current_user.is_authenticated:
-            return redirect(url_for('admin_login'))  # login chung
+            return redirect(url_for('admin-login'))  # login chung
         # Nếu login nhưng role không đúng, có thể trả 403 thay vì redirect
         from flask import abort
         return abort(403)
@@ -24,7 +24,12 @@ class BaseIndexView(AdminIndexView):
         if current_user.role != self.required_role:
             from flask import abort
             return abort(403)
-        return self.render('admin/information.html')
+
+        from spa_app.dao import user_dao
+        user = user_dao.get_user_by_id(current_user.id)
+        age = user_dao.get_age_user(user.DOB)
+
+        return self.render('admin/information.html', age=age, user=user)
 
     @property
     def menu_title(self):
@@ -46,5 +51,8 @@ class BaseServiceView(ModelView):
     column_filters = ['name']
     column_labels = {
         'name': "Tên Dịch vụ",
-        'price': "Giá"
+        'image': "Hình ảnh",
+        'price': "Giá",
+        'category': "Loại",
+        'description': "Mô tả"
     }

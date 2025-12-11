@@ -104,11 +104,17 @@ class Service(Base):
     category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
     description = Column(db.Text)
 
+    def __str__(self):
+        return self.name
+
 class Category(Base):
     __tablename__ = 'category'
     __table_args__ = {'extend_existing': True}
     description = Column(db.Text)
     services = relationship('Service', backref='category', lazy=True)
+
+    def __str__(self):
+        return self.name
 
 
 @event.listens_for(User, "after_insert")

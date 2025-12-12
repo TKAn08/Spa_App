@@ -1,0 +1,44 @@
+{% extends 'layout/base.html' %}
+{% block title %}Danh Sách Nhân Viên{% endblock %}
+
+{% block content %}
+
+<h1 style="text-align: center; margin: 40px 0; color: #444;">Đội Ngũ Nhân Viên</h1>
+
+<div class="employee-grid">
+
+    {% for e in employees %}
+    <div class="employee-card">
+
+        <h3>{{ e.user.name }}</h3>
+
+        <div class="employee-info">
+            <p>
+                <i class="fas fa-map-marker-alt"></i>
+                <strong>Địa chỉ:</strong> {{ e.user.address }}
+            </p>
+            <p>
+                <i class="fas fa-phone-alt"></i>
+                <strong>Điện thoại:</strong> {{ e.user.phone_number }}
+            </p>
+            {% if e.employee_code %}
+            <p>
+                <i class="fas fa-id-card"></i>
+                <strong>Mã NV:</strong> {{ e.employee_code }}
+            </p>
+            {% endif %}
+
+            {% if e.shift %}
+            <p>
+                <i class="fas fa-calendar-alt"></i>
+                <strong>Ca làm:</strong> {{ e.shift }}
+            </p>
+            {% endif %}
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

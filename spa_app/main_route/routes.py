@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, request, redirect, session
 from flask_login import login_required, current_user, login_manager
 import math
 from spa_app.dao.user_dao import get_age_user, change_password
-from spa_app.dao import services_dao, user_dao
+from spa_app.dao import services_dao, user_dao, employee_dao
 
 
 main_bp = Blueprint('main_bp', __name__)
@@ -62,3 +62,16 @@ def user_profile(username):
 
     return render_template(template, username=username, tab=tab, age=age, message=message)
 
+
+@main_bp.route('/service/<int:id>', methods=['GET', 'POST'])
+def services_detail_view(id):
+    return render_template('services/service-detail.html',service=services_dao.get_service_by_id(id))
+
+@main_bp.route('/contact')
+def contact_view():
+    return render_template('contact.html' )
+
+@main_bp.route('/staff')
+def staff_view():
+    employees = employee_dao.load_all_employee()
+    return render_template('staff.html',employees = employees)

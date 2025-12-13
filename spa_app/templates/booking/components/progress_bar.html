@@ -1,0 +1,97 @@
+<!-- Progress Bar cho quy trình đặt lịch -->
+<div class="booking-progress mb-5">
+    <div class="row text-center">
+        <!-- BƯỚC 1: Thông tin khách hàng -->
+        <div class="col">
+            <a href="{{ url_for('main_bp.booking_step1') }}" class="text-decoration-none">
+                <div class="progress-step
+                    {% if request.endpoint in ['main_bp.booking_step1', 'main_bp.booking_step2', 'main_bp.booking_step3', 'main_bp.booking_step4', 'main_bp.booking_confirmation'] %}
+                        step-completed
+                    {% endif %}
+                    {% if request.endpoint == 'main_bp.booking_step1' %}
+                        step-active
+                    {% endif %}">
+                    <div class="step-number">1</div>
+                    <div>
+                        <small>Thông tin</small><br>
+                        <strong>Khách hàng</strong>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- BƯỚC 2: Chọn dịch vụ -->
+        <div class="col">
+            <a href="{% if request.endpoint in ['main_bp.booking_step2', 'main_bp.booking_step3', 'main_bp.booking_step4', 'main_bp.booking_confirmation'] %}{{ url_for('main_bp.booking_step2') }}{% else %}#{% endif %}"
+               class="text-decoration-none">
+                <div class="progress-step
+                    {% if request.endpoint in ['main_bp.booking_step2', 'main_bp.booking_step3', 'main_bp.booking_step4', 'main_bp.booking_confirmation'] %}
+                        step-completed
+                    {% endif %}
+                    {% if request.endpoint == 'main_bp.booking_step2' %}
+                        step-active
+                    {% endif %}">
+                    <div class="step-number">2</div>
+                    <div>
+                        <small>Dịch vụ</small><br>
+                        <strong>Chọn dịch vụ</strong>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- BƯỚC 3: Chọn nhân viên -->
+        <div class="col">
+            <a href="{% if request.endpoint in ['main_bp.booking_step3', 'main_bp.booking_step4', 'main_bp.booking_confirmation'] %}{{ url_for('main_bp.booking_step3') }}{% else %}#{% endif %}"
+               class="text-decoration-none">
+                <div class="progress-step
+                    {% if request.endpoint in ['main_bp.booking_step3', 'main_bp.booking_step4', 'main_bp.booking_confirmation'] %}
+                        step-completed
+                    {% endif %}
+                    {% if request.endpoint == 'main_bp.booking_step3' %}
+                        step-active
+                    {% endif %}">
+                    <div class="step-number">3</div>
+                    <div>
+                        <small>Nhân viên</small><br>
+                        <strong>Chọn nhân viên</strong>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- BƯỚC 4: Chọn thời gian -->
+        <div class="col">
+            <a href="{% if request.endpoint in ['main_bp.booking_step4', 'main_bp.booking_confirmation'] %}{{ url_for('main_bp.booking_step4') }}{% else %}#{% endif %}"
+               class="text-decoration-none">
+                <div class="progress-step
+                    {% if request.endpoint in ['main_bp.booking_step4', 'main_bp.booking_confirmation'] %}
+                        step-completed
+                    {% endif %}
+                    {% if request.endpoint == 'main_bp.booking_step4' %}
+                        step-active
+                    {% endif %}">
+                    <div class="step-number">4</div>
+                    <div>
+                        <small>Thời gian</small><br>
+                        <strong>Chọn ngày giờ</strong>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- BƯỚC 5: Xác nhận -->
+        <div class="col">
+            <div class="progress-step
+                {% if request.endpoint == 'main_bp.booking_confirmation' %}
+                    step-active
+                {% endif %}">
+                <div class="step-number">5</div>
+                <div>
+                    <small>Xác nhận</small><br>
+                    <strong>Hoàn tất</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

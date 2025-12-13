@@ -1,0 +1,203 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Xác nhận đặt lịch - Spa Beauty{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <!-- Progress Bar -->
+        {% include 'booking/components/progress_bar.html' %}
+
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-check-circle me-2"></i>Xác nhận đặt lịch</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">Vui lòng kiểm tra lại thông tin trước khi xác nhận</p>
+
+                <form method="POST" id="confirmation-form">
+                    {{ form.hidden_tag() }}
+
+                    <!-- Customer Information -->
+                    <div class="mb-4">
+                        <h5 class="border-bottom pb-2">
+                            <i class="fas fa-user me-2"></i>Thông tin khách hàng
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item mb-2">
+                                    <strong>Họ tên:</strong><br>
+                                    <span class="text-primary">{{ customer.name }}</span>
+                                </div>
+                                <div class="info-item mb-2">
+                                    <strong>Địa chỉ:</strong><br>
+                                    {{ customer.address if customer.address else "Không có" }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item mb-2">
+                                    <strong>Điện thoại:</strong><br>
+                                    <span class="text-primary">{{ customer.phone }}</span>
+                                </div>
+                                {% if customer.email %}
+                                <div class="info-item mb-2">
+                                    <strong>Email:</strong><br>
+                                    {{ customer.email }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services -->
+                    <div class="mb-4">
+                        <h5 class="border-bottom pb-2">
+                            <i class="fas fa-spa me-2"></i>Dịch vụ đã chọn
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Dịch vụ</th>
+                                        <th class="text-end">Thời gian</th>
+                                        <th class="text-end">Giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for service in services %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ service.name }}</strong>
+                                            {% if service.description %}
+                                            <br><small class="text-muted">{{ service.description }}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-end">{{ service.duration }} phút</td>
+                                        <td class="text-end">{{ service.price|format_currency }}đ</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Details -->
+                    <div class="mb-4">
+                        <h5 class="border-bottom pb-2">
+                            <i class="far fa-calendar-alt me-2"></i>Chi tiết lịch hẹn
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item mb-3">
+                                    <strong><i class="fas fa-calendar-day me-2"></i>Ngày:</strong><br>
+                                    <span class="fs-5 text-primary">{{ time_data.date|format_date }}</span>
+                                </div>
+                                <div class="info-item mb-3">
+                                    <strong><i class="fas fa-clock me-2"></i>Giờ:</strong><br>
+                                    <span class="fs-5 text-primary">{{ time_data.time }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item mb-3">
+                                    <strong><i class="fas fa-stopwatch me-2"></i>Tổng thời gian:</strong><br>
+                                    <span class="badge bg-info fs-6">{{ summary.total_duration }} phút</span>
+                                </div>
+                                <div class="info-item mb-3">
+                                    <strong><i class="fas fa-user-tie me-2"></i>Nhân viên:</strong><br>
+                                    {% if employee %}
+                                    <span class="text-success">{{ employee.name }}</span>
+                                    {% else %}
+                                    <span class="text-warning">Spa sẽ chọn nhân viên phù hợp</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+                        <h5 class="border-bottom pb-2">
+                            <i class="fas fa-sticky-note me-2"></i>Ghi chú thêm
+                        </h5>
+                        <div class="mb-3">
+                            {{ form.notes(class="form-control", rows="3",
+                                         placeholder="Nhập ghi chú hoặc yêu cầu đặc biệt (nếu có)...") }}
+                        </div>
+                    </div>
+
+                    <!-- Final Summary -->
+                    <div class="summary-box bg-light p-4 rounded">
+                        <h5 class="mb-4 text-center">
+                            <i class="fas fa-receipt me-2"></i>Hóa đơn tóm tắt
+                        </h5>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Số dịch vụ:</strong>
+                            </div>
+                            <div class="col-6 text-end">
+                                {{ services|length }} dịch vụ
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Tổng thời gian:</strong>
+                            </div>
+                            <div class="col-6 text-end">
+                                {{ summary.total_duration }} phút
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Tổng tiền dịch vụ:</strong>
+                            </div>
+                            <div class="col-6 text-end">
+                                {{ summary.total_price|format_currency }}đ
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 class="mb-0">Tổng thanh toán:</h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h3 class="text-success mb-0">{{ summary.total_price|format_currency }}đ</h3>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Giá đã bao gồm VAT. Thanh toán tại spa khi sử dụng dịch vụ.
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Important Notes -->
+                    <div class="alert alert-warning mt-4">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Lưu ý quan trọng:</h6>
+                        <ul class="mb-0">
+                            <li>Vui lòng đến trước <strong>15 phút</strong> để hoàn tất thủ tục</li>
+                            <li>Hủy lịch trước <strong>2 giờ</strong> nếu không thể đến</li>
+                            <li>Mang theo CMND/CCCD khi đến spa</li>
+                            <li>Liên hệ hotline <strong>1900 1234</strong> nếu có thay đổi</li>
+                        </ul>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-4">
+                        <a href="{{ url_for('main_bp.booking_step4') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Quay lại chỉnh sửa
+                        </a>
+                        {{ form.submit(class="btn btn-success btn-lg px-5") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

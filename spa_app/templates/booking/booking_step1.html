@@ -1,0 +1,83 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Thông tin khách hàng - Spa Beauty{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <!-- Progress Bar -->
+        {% include 'booking/components/progress_bar.html' %}
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-user me-2"></i>Thông tin khách hàng</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Vui lòng cung cấp thông tin liên hệ của bạn. <span class="text-danger">*</span> là bắt buộc.</p>
+
+                <form method="POST" id="step1-form" data-step="1">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                            {{ form.name(class="form-control", placeholder="Nguyễn Văn A",
+                                        **{'data-validate': 'name'}) }}
+                            {% if form.name.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.name.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                            {{ form.phone_number(class="form-control", placeholder="0912345678",
+                                                **{'data-validate': 'phone'}) }}
+                            {% if form.phone_number.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.phone_number.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email (tùy chọn)</label>
+                        {{ form.email(class="form-control", placeholder="example@gmail.com",
+                                     **{'data-validate': 'email'}) }}
+                        {% if form.email.errors %}
+                        <div class="text-danger small">
+                            {% for error in form.email.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Địa chỉ</label>
+                        {{ form.address(class="form-control", placeholder="Số nhà, đường, phường/xã, quận/huyện") }}
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Thông tin của bạn sẽ được bảo mật và chỉ sử dụng cho mục đích đặt lịch.
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('main_bp.index') }}" class="btn btn-outline-secondary me-md-2">
+                            <i class="fas fa-home me-1"></i>Về trang chủ
+                        </a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -38,11 +38,15 @@ def user_profile(username):
         confirm = request.form.get('confirm_new-password') or None
         if not current_user.check_password(old_password):
             message = "Mật khẩu hiện tại không đúng !"
+            # session['modal-type'] = 'error'
         elif new_password != confirm:
             message = "Mật khẩu không khớp !"
+            # session['modal-type'] = 'error'
         else:
+            message = "Thay đổi mật khẩu thành công !"
             user_dao.change_password(current_user, new_password)
-            session['update_success'] = True
+            # session['modal-type'] = 'success'
+        session['modal-message'] = message
 
     if tab == 'information' and request.method == 'POST':
         name = request.form.get('name')
@@ -50,10 +54,16 @@ def user_profile(username):
         dob = request.form.get('dob')
         address = request.form.get('address')
         phone_number = request.form.get('phone-number')
-        user_dao.change_information(current_user, name, gender, dob, address, phone_number)
 
-        session['update_success'] = True
+        if (user_dao.check_invalid_phone_number(phone_number)):
+            message = "Thay đổi tin thất bại, số điện thoại đã được đăng ký !"
+            # session['modal-type'] = 'error'
 
+        else:
+            message = "Thay đổi thông tin thành công !"
+            user_dao.change_information(current_user, name, gender, dob, address, phone_number)
+            # session['modal-type'] = 'success'
+        session['modal-message'] = message
 
     if tab == 'change_password':
         template = 'information-user/change-password.html'
@@ -65,7 +75,8 @@ def user_profile(username):
 
 @main_bp.route('/service/<int:id>', methods=['GET', 'POST'])
 def services_detail_view(id):
-    return render_template('services/service-detail.html',service=services_dao.get_service_by_id(id))
+    return render_template('services/service-detail.html',
+                           service=services_dao.get_service_by_id(id))
 
 @main_bp.route('/contact')
 def contact_view():

@@ -28,7 +28,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/{{current_user.username}}?tab=change_password" class="{% if active_page == 'change_password' %}active{% endif %}">
+                    <a href="/{{current_user.username}}?tab=change_password"
+                       class="{% if active_page == 'change_password' %}active{% endif %}">
                         <span class="fw-bold">
                             <i class="fas fa-lock me-1"></i>
                             <i class="fas fa-rotate-right me-1"></i>
@@ -60,9 +61,10 @@
 
         <!-- Cột nội dung chính: 7/12 -->
         <main class="col-md-9 d-block">
-            {% block content %}{% endblock %}
+            {% block content %}
+            {% endblock %}
         </main>
-
+        {% include "information-user/modal-information.html" %}
 
     </div>
 </div>

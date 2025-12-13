@@ -36,6 +36,9 @@ def change_password(user, new_password):
     user.set_hash_password(new_password)
     db.session.commit()
 
+def check_invalid_phone_number(phone_number):
+    return User.query.filter(User.phone_number==phone_number).first() is not None
+
 def change_information(user, name, gender, dob, address, phone_number):
     user.name = name
     user.gender = gender

@@ -25,7 +25,8 @@ def handler_login_view(template_name):
                     login_user(user)
                     return redirect(f'/{user.role.value}')  # redirect theo enum value
                 else:
-                    error_message = "Tài khooản hoặc mật khẩu không đúng"
+                    error_message = ("Tài khoản, mật khẩu không đúng "
+                                     "hoặc tên đăng nhập {{ user.name }} không tồn tại trên trang này!")
         else:
             error_message = "Tài khoản hoặc mật khẩu không đúng"
     return render_template(template_name, error_message=error_message)

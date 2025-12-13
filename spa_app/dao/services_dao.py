@@ -26,6 +26,8 @@ def count_services(cate_id=None):
 def count_services_per_page():
     return current_app.config["PAGE_SIZE"]
 
+def get_service_by_id(id):
+    return Service.query.get(id)
 
 def load_categories():
     return Category.query.all()

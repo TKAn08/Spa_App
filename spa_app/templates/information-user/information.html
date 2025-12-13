@@ -1,5 +1,5 @@
 {%extends 'information-user/base.html' %}
-{% block title %}Thông tin tài khoản{% endblock %}
+{% block title %}THông tin tài khoản{% endblock %}
 {% block content %}
 <div class="title d-flex gap-3 align-items-center justify-content-between">
     <h1 class="text-primary my-3">THÔNG TIN TÀI KHOẢN</h1>
@@ -75,23 +75,7 @@
         </div>
     </div>
 
-    <!-- Modal thông báo cập nhật thành công -->
-    <div class="modal fade" id="updateSuccessModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Thành công</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Thông tin tài khoản đã được cập nhật thành công!
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
 
 
@@ -101,7 +85,7 @@
             <div class="col-6">
                 <div class="p-2"><span class="fw-bold">Họ và tên: </span>{{current_user.name}}</div>
                 <div class="p-2"><span class="fw-bold">Tên tài khoản: </span>{{current_user.username}}</div>
-                <div class="p-2"><span class="fw-bold">SĐT: </span>{{current_user.phone_number}}:</div>
+                <div class="p-2"><span class="fw-bold">SĐT: </span>{{current_user.phone_number}}</div>
                 <div class="p-2"><span class="fw-bold">Địa chỉ: </span>{{current_user.address}}</div>
             </div>
             <div class="col-6">
@@ -122,12 +106,19 @@
 <h2 class="text-muted">THÔNG TIN ĐẶT LỊCH</h2>
 
 <script>
-    {% if session.get('update_success') %}
-        var updateSuccessModel = document.getElementById('updateSuccessModal');
-        var successModal = new bootstrap.Modal(updateSuccessModel);
-        successModal.show()
-        {% set update_success = session.pop('update_success') %}
+    {% if session.get('modal-message') %}
+        document.addEventListener("DOMContentLoaded", function () {
+        var updateModel = document.getElementById('updateModal');
+        var modal = new bootstrap.Modal(updateModel);
+
+        var modalContent = document.getElementById('modalContent');
+        modalContent.innerHTML = "{{ session.get('modal-message') }}";
+        modal.show()
+    });
+        {% set _ = session.pop('modal-message') %}
     {% endif %}
 </script>
 
 {% endblock %}
+
+

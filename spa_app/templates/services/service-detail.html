@@ -30,17 +30,19 @@
                 <h4 class="description-heading">Mô Tả Chi Tiết:</h4>
                 <div class="description-content">
                     {% if service.description %}
-                        {{ service.description | safe }}
+                    {{ service.description | safe }}
                     {% else %}
-                        <p class="text-muted">Dịch vụ này chưa có mô tả chi tiết.</p>
+                    <p class="text-muted">Dịch vụ này chưa có mô tả chi tiết.</p>
                     {% endif %}
                 </div>
             </div>
 
             <div class="d-grid gap-2">
-                <button type="button" class="btn btn-primary btn-lg booking-btn">
-                    <i class="fas fa-calendar-check me-2"></i> Đặt Lịch Ngay
-                </button>
+                <a href="{% if current_user.is_authenticated %}/order{% else %}%/login?next=/order{% endif %}">
+                    <button type="button" class="btn btn-primary btn-lg booking-btn">
+                        <i class="fas fa-calendar-check me-2"></i> Đặt Lịch Ngay
+                    </button>
+                </a>
             </div>
 
         </div>

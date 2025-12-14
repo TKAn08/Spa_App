@@ -91,13 +91,12 @@
 
                         <div class="summary-item">
                             <span class="summary-label">Nhân viên:</span>
-                            <span class="summary-value">
-                                {% if employee %}
-                                {{ employee.name }}
-                                {% else %}
-                                Spa sẽ chọn
-                                {% endif %}
-                            </span>
+                            {% if employee %}
+                            {{ employee.user.name }}
+                            {% else %}
+                            Spa sẽ chọn
+                            {% endif %}
+
                         </div>
 
                         <div class="summary-item">
@@ -137,62 +136,62 @@
     </div>
 </div>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const timeSlots = document.querySelectorAll(".time-slot");
-    const hiddenTimeInput = document.querySelector("select[name='appointment_time']");
-    const selectedTimeInfo = document.getElementById("selected-time-info");
-    const selectedTimeText = document.getElementById("selected-time-text");
+    document.addEventListener("DOMContentLoaded", function () {
+        const timeSlots = document.querySelectorAll(".time-slot");
+        const hiddenTimeInput = document.querySelector("select[name='appointment_time']");
+        const selectedTimeInfo = document.getElementById("selected-time-info");
+        const selectedTimeText = document.getElementById("selected-time-text");
 
-    // 1. Khi click vào slot giờ
-    timeSlots.forEach(slot => {
-        slot.addEventListener("click", function () {
+        // 1. Khi click vào slot giờ
+        timeSlots.forEach(slot => {
+            slot.addEventListener("click", function () {
 
-            // Xóa active cũ
-            timeSlots.forEach(s => s.classList.remove("active"));
+                // Xóa active cũ
+                timeSlots.forEach(s => s.classList.remove("active"));
 
-            // Đánh dấu slot được chọn
-            this.classList.add("active");
+                // Đánh dấu slot được chọn
+                this.classList.add("active");
 
-            // Gán value vào WTForms field
-            const timeValue = this.dataset.time;
-            hiddenTimeInput.value = timeValue;
+                // Gán value vào WTForms field
+                const timeValue = this.dataset.time;
+                hiddenTimeInput.value = timeValue;
 
-            // Hiển thị thông báo
-            selectedTimeInfo.classList.remove("d-none");
-            selectedTimeText.innerText = timeValue;
+                // Hiển thị thông báo
+                selectedTimeInfo.classList.remove("d-none");
+                selectedTimeText.innerText = timeValue;
+            });
         });
-    });
 
-    // 2. Khi chọn ngày → gọi API lấy giờ bận (OPTIONAL)
-    const dateSelect = document.querySelector("select[name='appointment_date']");
-    dateSelect.addEventListener("change", function () {
+        // 2. Khi chọn ngày → gọi API lấy giờ bận (OPTIONAL)
+        const dateSelect = document.querySelector("select[name='appointment_date']");
+        dateSelect.addEventListener("change", function () {
 
-        const date = this.value;
-        const employeeId = {{ employee.id if employee else 0 }};
+            const date = this.value;
+            const employeeId = {{ employee.id if employee else 0 }};
 
-        fetch("/api/get-available-times", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                date: date,
-                employee_id: employeeId
+            fetch("/api/get-available-times", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    date: date,
+                    employee_id: employeeId
+                })
             })
-        })
-        .then(res => res.json())
-        .then(data => {
+            .then(res => res.json())
+            .then(data => {
 
-            // Reset UI
-            timeSlots.forEach(slot => {
-                const value = slot.dataset.time;
+                // Reset UI
+                timeSlots.forEach(slot => {
+                    const value = slot.dataset.time;
 
-                if (data.booked_times.includes(value)) {
-                    slot.classList.add("disabled");
-                } else {
-                    slot.classList.remove("disabled");
-                }
+                    if (data.booked_times.includes(value)) {
+                        slot.classList.add("disabled");
+                    } else {
+                        slot.classList.remove("disabled");
+                    }
+                });
             });
         });
     });
-});
 </script>
 {% endblock %}

@@ -1,0 +1,198 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Chọn thời gian - Spa Beauty{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <!-- Progress Bar -->
+        {% include 'booking/components/progress_bar.html' %}
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="far fa-calendar-alt me-2"></i>Chọn thời gian</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="step4-form" data-step="4">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row">
+                        <!-- Date Selection -->
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h5 class="mb-3">📅 Chọn ngày</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Ngày hẹn <span class="text-danger">*</span></label>
+                                    {{ form.appointment_date(class="form-select", **{'data-check': 'date'}) }}
+                                </div>
+
+                                <!-- Selected Date Info -->
+                                <div class="alert alert-light border mt-3 d-none" id="date-info">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-calendar-check text-primary me-3 fs-4"></i>
+                                        <div>
+                                            <strong id="selected-date-text"></strong>
+                                            <div class="small text-muted" id="date-availability"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Time Selection -->
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h5 class="mb-3">⏰ Chọn giờ</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Giờ hẹn <span class="text-danger">*</span></label>
+                                    {{ form.appointment_time(class="form-select d-none") }}
+
+                                    <!-- Time Slots -->
+                                    <div class="time-slots-grid mt-2" id="time-slots-container">
+                                        <div class="row">
+                                            {% for value, label in form.appointment_time.choices %}
+                                            <div class="col-4 mb-2">
+                                                <div class="time-slot" data-time="{{ value }}">
+                                                    {{ label }}
+                                                    <div class="time-slot-status small"></div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Loading State -->
+                                <div class="text-center py-3 d-none" id="times-loading">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Đang tải...</span>
+                                    </div>
+                                    <p class="text-muted mt-2">Đang kiểm tra khung giờ...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Summary -->
+                    <div class="summary-box">
+                        <h5 class="mb-3">📋 Tóm tắt đặt lịch</h5>
+
+                        <div class="summary-item">
+                            <span class="summary-label">Dịch vụ:</span>
+                            <span class="summary-value">
+                                {% for service in services %}
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ service.name }}</span>
+                                    <span>{{ service.price|format_currency }}đ</span>
+                                </div>
+                                {% endfor %}
+                            </span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">Nhân viên:</span>
+                            <span class="summary-value">
+                                {% if employee %}
+                                {{ employee.name }}
+                                {% else %}
+                                Spa sẽ chọn
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">Thời lượng:</span>
+                            <span class="summary-value">{{ total_duration }} phút</span>
+                        </div>
+
+                        <div class="summary-total">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Tổng cộng:</span>
+                                <span class="fs-5 fw-bold">{{ total_price|format_currency }}đ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Time Info -->
+                    <div class="alert alert-success d-none" id="selected-time-info">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle me-3 fs-4"></i>
+                            <div>
+                                <strong>Đã chọn:</strong>
+                                <div id="selected-time-text"></div>
+                                <small class="text-muted" id="time-confirmation"></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-4">
+                        <a href="{{ url_for('main_bp.booking_step3') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Quay lại
+                        </a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const timeSlots = document.querySelectorAll(".time-slot");
+    const hiddenTimeInput = document.querySelector("select[name='appointment_time']");
+    const selectedTimeInfo = document.getElementById("selected-time-info");
+    const selectedTimeText = document.getElementById("selected-time-text");
+
+    // 1. Khi click vào slot giờ
+    timeSlots.forEach(slot => {
+        slot.addEventListener("click", function () {
+
+            // Xóa active cũ
+            timeSlots.forEach(s => s.classList.remove("active"));
+
+            // Đánh dấu slot được chọn
+            this.classList.add("active");
+
+            // Gán value vào WTForms field
+            const timeValue = this.dataset.time;
+            hiddenTimeInput.value = timeValue;
+
+            // Hiển thị thông báo
+            selectedTimeInfo.classList.remove("d-none");
+            selectedTimeText.innerText = timeValue;
+        });
+    });
+
+    // 2. Khi chọn ngày → gọi API lấy giờ bận (OPTIONAL)
+    const dateSelect = document.querySelector("select[name='appointment_date']");
+    dateSelect.addEventListener("change", function () {
+
+        const date = this.value;
+        const employeeId = {{ employee.id if employee else 0 }};
+
+        fetch("/api/get-available-times", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                date: date,
+                employee_id: employeeId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            // Reset UI
+            timeSlots.forEach(slot => {
+                const value = slot.dataset.time;
+
+                if (data.booked_times.includes(value)) {
+                    slot.classList.add("disabled");
+                } else {
+                    slot.classList.remove("disabled");
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

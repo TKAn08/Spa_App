@@ -1,0 +1,99 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Chọn dịch vụ - Spa Beauty{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <!-- Progress Bar -->
+        {% include 'booking/components/progress_bar.html' %}
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-spa me-2"></i>Chọn dịch vụ</h4>
+            </div>
+
+            <div class="card-body">
+                <p class="text-muted mb-3">Bạn có thể chọn nhiều dịch vụ. <span class="text-danger">*</span> là bắt buộc chọn ít nhất một dịch vụ.</p>
+
+                <form method="POST" id="step2-form" data-step="2">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row" id="services-container">
+                        {% for category in categories %}
+                        <div class="col-12 mb-4">
+                            <h5 class="text-primary mb-3 pb-2 border-bottom">
+                                <i class="fas fa-star me-2"></i>{{ category.category.name }}
+                                {% if category.category.description %}
+                                <small class="text-muted fw-normal">- {{ category.category.description }}</small>
+                                {% endif %}
+                            </h5>
+
+                            <div class="row">
+                                {% for service in category.services %}
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <div class="service-card h-100" onclick="toggleService({{ service.id }})">
+                                        <div class="form-check h-100">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   name="services"
+                                                   value="{{ service.id }}"
+                                                   id="service{{ service.id }}"
+                                                   data-price="{{ service.price }}"
+                                                   data-duration="{{ service.duration }}">
+                                            <label class="form-check-label w-100 h-100" for="service{{ service.id }}">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <h6 class="mb-0">{{ service.name }}</h6>
+                                                    <span class="badge bg-secondary">⏱ {{ service.duration }}'</span>
+                                                </div>
+                                                <p class="text-primary mb-2">
+                                                    <strong>{{ service.price|format_currency }}đ</strong>
+                                                </p>
+                                                {% if service.description %}
+                                                <p class="text-muted small mb-2">{{ service.description }}</p>
+                                                {% endif %}
+                                                <div class="mt-auto">
+                                                    <span class="badge bg-light text-dark border">
+                                                        <i class="fas fa-check me-1"></i>Chọn
+                                                    </span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Real-time Summary -->
+                    <div class="summary-box mt-4 d-none" id="services-summary">
+                        <h5 class="mb-3">📊 Tóm tắt dịch vụ đã chọn</h5>
+                        <div id="selected-services-list" class="mb-2">
+                            <!-- Dynamic content sẽ được thêm bởi JS -->
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center border-top pt-2">
+                            <div>
+                                <strong>Tổng thời gian:</strong>
+                                <span id="total-duration" class="ms-2">0 phút</span>
+                            </div>
+                            <div class="text-end">
+                                <strong>Tổng cộng:</strong>
+                                <span id="total-price" class="ms-2 fw-bold fs-5">0đ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-4">
+                        <a href="{{ url_for('main_bp.booking_step1') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Quay lại
+                        </a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

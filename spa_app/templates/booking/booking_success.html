@@ -1,0 +1,118 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Đặt lịch thành công - Spa Beauty{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <div class="card border-success">
+            <div class="card-body py-5">
+                <div class="mb-4">
+                    <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                </div>
+
+                <h2 class="text-success mb-3">🎉 Đặt lịch thành công!</h2>
+                <p class="lead mb-4">
+                    Cảm ơn bạn đã đặt lịch tại Spa Beauty. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất để xác nhận.
+                </p>
+
+                <!-- Booking Details -->
+                <div class="booking-details summary-box text-start mb-4 p-4">
+                    <h5 class="mb-3 border-bottom pb-2">
+                        <i class="fas fa-clipboard-check me-2"></i>Thông tin đặt lịch
+                    </h5>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-item mb-3">
+                                <strong>Mã đặt lịch:</strong><br>
+                                <span class="text-primary fs-5">#{{ booking.id }}</span>
+                            </div>
+
+                            <div class="detail-item mb-3">
+                                <strong>Họ tên:</strong><br>
+                                {{ booking.customer.name }}
+                            </div>
+
+                            <div class="detail-item mb-3">
+                                <strong>Ngày hẹn:</strong><br>
+                                {{ booking.date.strftime('%d/%m/%Y') }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="detail-item mb-3">
+                                <strong>Giờ hẹn:</strong><br>
+                                {{ booking.time.strftime('%H:%M') }}
+                            </div>
+
+                            <div class="detail-item mb-3">
+                                <strong>Trạng thái:</strong><br>
+                                <span class="badge bg-warning">Chờ xác nhận</span>
+                            </div>
+
+                            <div class="detail-item mb-3">
+                                <strong>Tổng cộng:</strong><br>
+                                <span class="fw-bold fs-5">{{ booking.total_price|format_currency }}đ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services List -->
+                    <div class="mt-3">
+                        <strong>Dịch vụ đã đặt:</strong>
+                        <ul class="list-group list-group-flush mt-2">
+                            {% for service in services %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>{{ service.name }}</span>
+                                <span>{{ service.price|format_currency }}đ</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Important Information -->
+                <div class="alert alert-info">
+                    <div class="d-flex">
+                        <i class="fas fa-info-circle me-3 fs-4"></i>
+                        <div>
+                            <strong>Lưu ý:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Vui lòng đến trước <strong>15 phút</strong> để hoàn tất thủ tục</li>
+                                <li>Mang theo mã đặt lịch <strong>#{{ booking.id }}</strong> khi đến spa</li>
+                                <li>Kiểm tra email/SMS để nhận thông báo xác nhận</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-5">
+                    <a href="{{ url_for('main_bp.index') }}" class="btn btn-primary me-md-2">
+                        <i class="fas fa-home me-1"></i>Về trang chủ
+                    </a>
+                    <a href="{{ url_for('main_bp.booking_step1') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-plus me-1"></i>Đặt lịch mới
+                    </a>
+                    <button onclick="window.print()" class="btn btn-outline-secondary ms-md-2">
+                        <i class="fas fa-print me-1"></i>In hóa đơn
+                    </button>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="mt-4 pt-3 border-top">
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-phone me-2"></i>
+                        Cần hỗ trợ? Gọi ngay: <strong>1900 1234</strong>
+                    </p>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        Địa chỉ: 123 Đường Spa Beauty, Quận 1, TP.HCM
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

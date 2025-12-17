@@ -1,0 +1,114 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Chọn nhân viên - Spa Beauty{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        {% include 'booking/components/progress_bar.html' %}
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-user-tie me-2"></i>Chọn nhân viên</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">Chọn nhân viên phục vụ hoặc để chúng tôi chọn cho bạn</p>
+
+                <form method="POST" id="step3-form" data-step="3">
+                    {{ form.hidden_tag() }}
+
+                    <!-- Spa Auto Selection -->
+                    <div class="mb-4">
+                        <div class="employee-card" onclick="selectEmployee('0')">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="employee"
+                                       value="0" id="employeeAuto" checked>
+                                <label class="form-check-label w-100" for="employeeAuto">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">🤖 Để spa chọn nhân viên phù hợp</h6>
+                                            <p class="text-muted small mb-0">Chúng tôi sẽ chọn nhân viên tốt nhất cho bạn dựa trên dịch vụ</p>
+                                        </div>
+                                        <span class="badge bg-info">Khuyến nghị</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Specific Employee Selection -->
+                    <div class="mb-4">
+                        <h6 class="mb-3">Hoặc chọn nhân viên cụ thể:</h6>
+
+                        <div class="row" id="employees-container">
+                            {% for employee in employees %}
+                            <div class="col-md-6 mb-3">
+                                <div class="employee-card" onclick="selectEmployee('{{ employee.id }}')" data-employee-id="{{ employee.id }}">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="employee"
+                                               value="{{ employee.id }}" id="employee{{ employee.id }}">
+                                        <label class="form-check-label w-100" for="employee{{ employee.id }}">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <h6 class="mb-1">{{ employee.name }}</h6>
+                                                    <div class="availability-info small text-muted">
+                                                        <i class="fas fa-user-clock me-1"></i>
+                                                        <span class="availability-text" id="availability-{{ employee.id }}">Đang kiểm tra...</span>
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-success">Có sẵn</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Services Summary -->
+                    <div class="summary-box">
+                        <h5 class="mb-3">📋 Dịch vụ đã chọn</h5>
+                        <div id="services-review">
+                            {% for service in services %}
+                            <div class="d-flex justify-content-between border-bottom pb-1 mb-1">
+                                <span>{{ service.name }}</span>
+                                <span>{{ service.price|format_currency }}đ</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="d-flex justify-content-between border-top pt-2">
+                            <strong>Tổng thời gian:</strong>
+                            <span>{{ total_duration }} phút</span>
+                        </div>
+                    </div>
+
+                    {% if form.employee.errors %}
+                    <div class="alert alert-danger mt-3">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        {% for error in form.employee.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-4">
+                        <a href="{{ url_for('main_bp.booking_step2') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Quay lại
+                        </a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+</script>
+{% endblock %}

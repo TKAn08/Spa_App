@@ -9,7 +9,7 @@
     </p>
     <div class="d-block d-sm-flex justify-content-center gap-2 ">
 
-        <a href="{% if current_user.is_authenticated %}/order{% else %}/login?next=/order{% endif %}"
+        <a href="{% if current_user.is_authenticated %}/booking/step1{% else %}/login?next=/booking/step1{% endif %}"
            class="d-block m-2">
             <button class="btn btnColor btnHover px-4 py-2">
                 <i class="fa-solid fa-calendar-days me-2"></i>

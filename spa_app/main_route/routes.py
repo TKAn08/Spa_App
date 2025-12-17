@@ -1,5 +1,4 @@
-import datetime
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 from flask import render_template, Blueprint, request, redirect, session, jsonify, url_for, flash
 from flask_login import login_required, current_user
 import math
@@ -75,7 +74,6 @@ def user_profile(username):
             # session['modal-type'] = 'success'
         session['modal-message'] = message
 
-
     if tab == 'change_password':
         template = 'information-user/change-password.html'
     else:
@@ -86,12 +84,10 @@ def user_profile(username):
 
 @main_bp.route('/service/<int:id>', methods=['GET', 'POST'])
 def services_detail_view(id):
-
     return render_template('services/service-detail.html',
                            service=services_dao.get_service_by_id(id))
 
     return render_template('services/service-detail.html', service=services_dao.get_service_by_id(id))
-
 
 
 @main_bp.route('/contact')
@@ -166,7 +162,6 @@ def booking_step2():
     )
 
 
-
 # --- Bước 3: Chọn nhân viên ---
 @main_bp.route('/booking/step3', methods=['GET', 'POST'])
 def booking_step3():
@@ -204,154 +199,227 @@ def booking_step3():
         total_duration=total_duration
     )
 
-#---Bước 4: Chọn ngày giờ ---
+
 @main_bp.route('/booking/step4', methods=['GET', 'POST'])
 def booking_step4():
     form = BookingStep4Form()
-
     booking_data = session.get('booking', {})
-    service_ids = booking_data.get('service_ids', [])
 
-    services = Service.query.filter(Service.id.in_(service_ids)).all() if service_ids else []
+    # ===== SERVICES =====
+    service_ids = booking_data.get('service_ids', [])
+    services = Service.query.filter(Service.id.in_(service_ids)).all()
+
+    if not services:
+        flash("Vui lòng chọn dịch vụ trước", "danger")
+        return redirect(url_for("main_bp.booking_step2"))
 
     total_duration = sum(s.duration for s in services)
     total_price = sum(s.price for s in services)
-    # Lấy employee từ session
+
+    # ===== EMPLOYEE =====
     employee_id = booking_data.get('employee_id')
-    employee = Employee.query.get(employee_id) if employee_id else None
+    employee = Employee.query.get(employee_id) if employee_id not in (None, 0) else None
 
-    # ===== DANH SÁCH NGÀY (KHÔNG QUÁ KHỨ) =====
+    # ===== DATE =====
     today = date.today()
-    days = []
-    for i in range(14):
-        d = today + datetime.timedelta(days=i)
-        days.append((d.strftime("%Y-%m-%d"), d.strftime("%d/%m/%Y (%A)")))
+    form.appointment_date.choices = [
+        (
+            (today + timedelta(days=i)).strftime("%Y-%m-%d"),
+            (today + timedelta(days=i)).strftime("%d/%m/%Y (%A)")
+        )
+        for i in range(14)
+    ]
 
-    # ⚠️ GÁN CHO FORM TRƯỚC validate
-    form.appointment_date.choices = days
+    # ===== TIME (DURATION-AWARE) =====
+    WORK_START = 9
+    WORK_END = 18
 
-    # ===== DANH SÁCH GIỜ =====
-    hours = [(f"{h:02d}:00", f"{h:02d}:00") for h in range(9, 18)]
-    form.appointment_time.choices = hours
+    form.appointment_time.choices = [
+        (f"{h:02d}:00", f"{h:02d}:00")
+        for h in range(WORK_START, WORK_END)
+        if h * 60 + total_duration <= WORK_END * 60
+    ]
 
     # ===== POST =====
     if request.method == "POST":
+
         if not form.appointment_time.data:
             flash("Vui lòng chọn giờ hẹn", "danger")
             return redirect(url_for("main_bp.booking_step4"))
 
-        booking_data['date'] = form.appointment_date.data
-        booking_data['time'] = form.appointment_time.data
+        appointment_date = datetime.strptime(
+            form.appointment_date.data, "%Y-%m-%d"
+        ).date()
+
+        appointment_time = datetime.strptime(
+            form.appointment_time.data, "%H:%M"
+        ).time()
+
+        selected_employee_id = employee_id
+
+        # AUTO ASSIGN CHỈ Ở ĐÂY
+        if selected_employee_id == 0:
+            selected_employee_id = auto_assign_employee(
+                appointment_date,
+                appointment_time,
+                [s.duration for s in services]
+            )
+
+            if not selected_employee_id:
+                flash("Không có nhân viên phù hợp cho khung giờ này", "danger")
+                return redirect(url_for("main_bp.booking_step4"))
+
+        # CHECK TẠM (FINAL CHECK Ở STEP 5)
+        valid, message = is_booking_valid(
+            selected_employee_id,
+            appointment_date,
+            appointment_time,
+            [s.duration for s in services]
+        )
+
+        if not valid:
+            flash(message, "danger")
+            return redirect(url_for("main_bp.booking_step4"))
+
+        booking_data.update({
+            'date': form.appointment_date.data,
+            'time': form.appointment_time.data,
+            'employee_id': selected_employee_id
+        })
 
         session['booking'] = booking_data
         session.modified = True
 
-        return redirect(url_for('main_bp.booking_confirmation'))
-
+        return redirect(url_for("main_bp.booking_confirmation"))
 
     return render_template(
-        'booking/booking_step4.html',
+        "booking/booking_step4.html",
         form=form,
         services=services,
         total_duration=total_duration,
         total_price=total_price,
-        employee = employee
+        employee=employee
     )
 
 
-# --- Bước 5: Xác nhận ---
 @main_bp.route('/booking/confirmation', methods=['GET', 'POST'])
 def booking_confirmation():
     form = BookingConfirmForm()
     booking_data = session.get('booking')
 
+    # ===== VALIDATE SESSION =====
     if not booking_data:
+        flash("Vui lòng đặt lịch lại từ đầu", "danger")
         return redirect(url_for('main_bp.booking_step1'))
 
-    # Lấy thông tin từ session
-    service_ids = booking_data.get('service_ids', [])
-    services = Service.query.filter(Service.id.in_(service_ids)).all() if service_ids else []
-    employee_id = booking_data.get('employee_id')
-    employee = Employee.query.get(employee_id) if employee_id and employee_id != 0 else None
+    required_keys = ['date', 'time', 'service_ids', 'employee_id']
+    if not all(k in booking_data for k in required_keys):
+        flash("Dữ liệu đặt lịch không hợp lệ", "danger")
+        return redirect(url_for('main_bp.booking_step1'))
 
-    # Tính tổng
-    total_duration = sum(s.duration for s in services) if services else 0
-    total_price = sum(s.price for s in services) if services else 0
+    # ===== SERVICES =====
+    services = Service.query.filter(
+        Service.id.in_(booking_data['service_ids'])
+    ).all()
 
-    # Thông tin khách hàng
-    customer_info = {
-        'name': booking_data.get('name'),
-        'phone': booking_data.get('phone'),
-        'email': booking_data.get('email'),
-        'address': booking_data.get('address')
-    }
+    if not services:
+        flash("Không có dịch vụ hợp lệ", "danger")
+        return redirect(url_for('main_bp.booking_step2'))
 
-    # Chuyển ngày giờ sang object datetime
-    appointment_date = datetime.datetime.strptime(booking_data['date'], "%Y-%m-%d").date()
-    appointment_time = datetime.datetime.strptime(booking_data['time'], "%H:%M").time()
+    service_durations = [s.duration for s in services]
+    total_duration = sum(service_durations)
+    total_price = sum(s.price for s in services)
 
-    # --- Tự động chọn nhân viên nếu user để 0 ---
+    appointment_date = datetime.strptime(
+        booking_data['date'], "%Y-%m-%d"
+    ).date()
+
+    appointment_time = datetime.strptime(
+        booking_data['time'], "%H:%M"
+    ).time()
+
+    # ===== EMPLOYEE =====
+    employee_id = booking_data['employee_id']
+
+    # Auto assign nếu spa chọn
     if employee_id == 0:
-        employee_id = auto_assign_employee(appointment_date, appointment_time, [s.duration for s in services])
-        employee = Employee.query.get(employee_id)
+        employee_id = auto_assign_employee(
+            appointment_date,
+            appointment_time,
+            service_durations
+        )
 
-    # --- Kiểm tra hợp lệ trước khi hiển thị ---
-    validation_errors = []
-    valid, message = is_booking_valid(employee_id, appointment_date, appointment_time, [s.duration for s in services])
-    if not valid:
-        validation_errors.append(message)
+        if not employee_id:
+            flash("Không có nhân viên trống trong khung giờ này", "danger")
+            return redirect(url_for('main_bp.booking_step4'))
 
-    if validation_errors:
-        for error in validation_errors:
-            flash(error, "danger")
-        return redirect(url_for('main_bp.booking_step3'))
+    employee = Employee.query.get(employee_id)
 
+    # ===== CUSTOMER (THEO MODEL USER) =====
+    customer = None
+    if current_user.is_authenticated:
+        customer = {
+            "name": current_user.name,
+            "phone": current_user.phone_number,
+            "address": current_user.address
+        }
+
+    # ===== POST: FINAL CHECK & SAVE =====
     if form.validate_on_submit():
-        # --- Kiểm tra lại lần cuối trước khi lưu ---
-        valid, message = is_booking_valid(employee_id, appointment_date, appointment_time, [s.duration for s in services])
+        valid, message = is_booking_valid(
+            employee_id,
+            appointment_date,
+            appointment_time,
+            service_durations
+        )
+
         if not valid:
             flash(message, "danger")
             return redirect(url_for('main_bp.booking_step4'))
 
-        # Tạo booking
-        booking = Booking(
-            customer_id=current_user.id if current_user.is_authenticated else None,
-            staff_id=employee_id,
-            date=appointment_date,
-            time=appointment_time,
-            status=BookingStatus.PENDING,
-            notes=form.notes.data,
-            total_price=total_price
-        )
+        try:
+            booking = Booking(
+                customer_id=current_user.id,
+                staff_id=employee_id,
+                date=appointment_date,
+                time=appointment_time,
+                status=BookingStatus.PENDING,
+                notes=form.notes.data,
+                total_price=total_price
+            )
 
-        # Thêm dịch vụ
-        for service in services:
-            booking.services.append(service)
+            for s in services:
+                booking.services.append(s)
 
-        db.session.add(booking)
-        db.session.commit()
+            db.session.add(booking)
+            db.session.commit()
 
-        # Xóa session
-        session.pop('booking', None)
+            session.pop('booking', None)
 
-        return render_template('booking/booking_success.html',
-                               booking=booking,
-                               services=services)
+            return render_template(
+                'booking/booking_success.html',
+                booking=booking,
+                services=services
+            )
 
-    return render_template('booking/booking_confirmation.html',
-                           form=form,
-                           customer=customer_info,
-                           services=services,
-                           employee=employee,
-                           time_data={
-                               'date': booking_data.get('date'),
-                               'time': booking_data.get('time')
-                           },
-                           summary={
-                               'total_duration': total_duration,
-                               'total_price': total_price
-                           },
-                           validation_errors=validation_errors)
+        except Exception as e:
+            db.session.rollback()
+            flash("Có lỗi khi lưu đặt lịch", "danger")
+            return redirect(url_for('main_bp.booking_step4'))
+
+    return render_template(
+        'booking/booking_confirmation.html',
+        form=form,
+        services=services,
+        employee=employee,
+        customer=customer,
+        appointment_date=appointment_date,
+        appointment_time=appointment_time,
+        total_duration=total_duration,
+        total_price=total_price
+    )
+
+
 
 
 @main_bp.route('/order')
@@ -359,11 +427,12 @@ def booking_history():
     if not current_user.is_authenticated:
         return redirect(url_for('auth_bp.login_view'))
 
-    bookings = Booking.query.filter_by(customer_id=current_user.id)\
-                            .order_by(Booking.created_date.desc())\
-                            .all()
+    bookings = Booking.query.filter_by(customer_id=current_user.id) \
+        .order_by(Booking.created_date.desc()) \
+        .all()
 
     return render_template('booking/booking_history.html', bookings=bookings)
+
 
 @main_bp.route('/order/<int:booking_id>')
 def booking_detail(booking_id):
@@ -374,5 +443,3 @@ def booking_detail(booking_id):
         return "Bạn không có quyền xem lịch này", 403
 
     return render_template('booking/booking_detail.html', booking=booking)
-
-

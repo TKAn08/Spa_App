@@ -2,10 +2,10 @@ from spa_app.admin_route import base
 from flask_admin import Admin, expose
 
 from spa_app.admin_route.base import BaseLogoutView
-from spa_app.models import UserRole, User, Service, Category
+from spa_app.models import UserRole, User, Service, Category, Booking, db
 from wtforms.fields.simple import TextAreaField, PasswordField
 from wtforms.widgets import TextArea
-from spa_app import db
+from flask import current_app
 from flask_admin.theme import Bootstrap4Theme
 
 class AuthenticatedView(base.BaseAuthenticatedView):
@@ -53,6 +53,10 @@ class MyCategoryView(AuthenticatedView):
         'description': "Mô tả"
     }
 
+class MyBookingView(AuthenticatedView):
+    can_export = True
+
+
 class StatsView(AuthenticatedView):
     @expose('/')
     def index(self):
@@ -69,7 +73,8 @@ def init_admin(app):
         index_view=admin_index,
         url="/admin"
     )
-    admin.add_view(MyUserView(User, db.session, name="Nhân viên"))
+    admin.add_view(MyUserView(User, db.session, name="Tài khoản người dùng"))
     admin.add_view(MyCategoryView(Category, db.session, name='Loại dịch vụ'))
+    admin.add_view(MyBookingView(Booking, db.session, name='Lịch đã đặt', endpoint="booking_admin"))
     admin.add_view(MyServiceView(Service, db.session, name='Dịch vụ', endpoint='service_admin'))
     admin.add_view(BaseLogoutView("Đăng xuất", endpoint="admin_logout"))

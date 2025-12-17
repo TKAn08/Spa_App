@@ -1,9 +1,7 @@
 from spa_app.admin_route import base
 from flask_admin.theme import Bootstrap4Theme
 from spa_app.admin_route.roles.admin import Admin
-from spa_app.models import UserRole, Service
-from spa_app.models import db
-
+from spa_app.models import UserRole, Service, db
 class AuthenticatedView(base.BaseAuthenticatedView):
     required_role = UserRole.CASHIER
 

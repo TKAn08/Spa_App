@@ -26,6 +26,9 @@ class Base(db.Model):
     active = Column(Boolean, default=True)
     created_date = Column(DateTime, default=datetime.now)
 
+    def __str__(self):
+        return self.name
+
 
 # USER
 
@@ -51,6 +54,9 @@ class User(Base, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+    def __str__(self):
+        return self.name
 
 
 # ROLE TABLES
@@ -101,6 +107,9 @@ class Category(Base):
     description = Column(db.Text)
     services = relationship("Service", back_populates="category", lazy=True)
 
+    def __str__(self):
+        return self.name
+
 
 # SERVICE
 
@@ -138,6 +147,10 @@ class BookingStatus(RoleEnum):
     CONFIRMED = "Confirmed"
     COMPLETED = "Completed"
     CANCELED = "Canceled"
+
+class PaymentStatus(RoleEnum):
+    UNPAID = "Unpaid"
+    PAID = "Paid"
 
 
 # BOOKING SERVICE (association)
@@ -177,6 +190,7 @@ class Booking(db.Model):
     time = Column(db.Time, nullable=False)
 
     status = Column(Enum(BookingStatus), default=BookingStatus.PENDING)
+    payment = Column(Enum(PaymentStatus), default=PaymentStatus.UNPAID)
     notes = Column(db.Text)
     total_price = Column(Float, default=0)
 

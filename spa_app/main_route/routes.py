@@ -1,17 +1,16 @@
 import datetime
 from datetime import date, timedelta
-
-
 from flask import render_template, Blueprint, request, redirect, session, jsonify, url_for, flash
 from flask_login import login_required, current_user
 import math
-
 from spa_app import db
+from spa_app.admin_route.roles import employee
 from spa_app.dao.user_dao import get_age_user, change_password
 from spa_app.dao import services_dao, user_dao, employee_dao
 from spa_app.forms.booking_form import BookingConfirmForm, BookingStep4Form, BookingStep3Form, BookingStep2Form, \
     BookingStep1Form
 from spa_app.models import Setting, Booking, User, BookingStatus, Service, Employee, Category  # THÊM Category
+from spa_app.helpers.booking_helpers import is_booking_valid, auto_assign_employee
 
 main_bp = Blueprint('main_bp', __name__)
 
@@ -205,7 +204,7 @@ def booking_step3():
         total_duration=total_duration
     )
 
-#--- Bước 4: Chọn ngày giờ ---
+#---Bước 4: Chọn ngày giờ ---
 @main_bp.route('/booking/step4', methods=['GET', 'POST'])
 def booking_step4():
     form = BookingStep4Form()
@@ -217,6 +216,9 @@ def booking_step4():
 
     total_duration = sum(s.duration for s in services)
     total_price = sum(s.price for s in services)
+    # Lấy employee từ session
+    employee_id = booking_data.get('employee_id')
+    employee = Employee.query.get(employee_id) if employee_id else None
 
     # ===== DANH SÁCH NGÀY (KHÔNG QUÁ KHỨ) =====
     today = date.today()
@@ -246,12 +248,14 @@ def booking_step4():
 
         return redirect(url_for('main_bp.booking_confirmation'))
 
+
     return render_template(
         'booking/booking_step4.html',
         form=form,
         services=services,
         total_duration=total_duration,
-        total_price=total_price
+        total_price=total_price,
+        employee = employee
     )
 
 
@@ -274,7 +278,7 @@ def booking_confirmation():
     total_duration = sum(s.duration for s in services) if services else 0
     total_price = sum(s.price for s in services) if services else 0
 
-    # Thông tin customer
+    # Thông tin khách hàng
     customer_info = {
         'name': booking_data.get('name'),
         'phone': booking_data.get('phone'),
@@ -282,95 +286,39 @@ def booking_confirmation():
         'address': booking_data.get('address')
     }
 
-    # === THÊM: VALIDATION CUỐI CÙNG TRƯỚC KHI HIỂN THỊ ===
+    # Chuyển ngày giờ sang object datetime
+    appointment_date = datetime.datetime.strptime(booking_data['date'], "%Y-%m-%d").date()
+    appointment_time = datetime.datetime.strptime(booking_data['time'], "%H:%M").time()
+
+    # --- Tự động chọn nhân viên nếu user để 0 ---
+    if employee_id == 0:
+        employee_id = auto_assign_employee(appointment_date, appointment_time, [s.duration for s in services])
+        employee = Employee.query.get(employee_id)
+
+    # --- Kiểm tra hợp lệ trước khi hiển thị ---
     validation_errors = []
+    valid, message = is_booking_valid(employee_id, appointment_date, appointment_time, [s.duration for s in services])
+    if not valid:
+        validation_errors.append(message)
 
-    if employee_id and employee_id != 0:
-        try:
-            appointment_date = datetime.datetime.strptime(booking_data['date'], "%Y-%m-%d").date()
-            appointment_time = datetime.datetime.strptime(booking_data['time'], "%H:%M").time()
-
-            # 1. Kiểm tra giới hạn 5 khách/ngày
-            setting = Setting.query.first()
-            max_bookings = setting.max_booking_per_day if setting else 5
-
-            bookings_count = Booking.query.filter_by(
-                staff_id=employee_id,
-                date=appointment_date
-            ).filter(
-                Booking.status.in_([BookingStatus.PENDING, BookingStatus.CONFIRMED])
-            ).count()
-
-            if bookings_count >= max_bookings:
-                validation_errors.append(f"⚠️ Nhân viên đã có {bookings_count}/{max_bookings} khách trong ngày này")
-
-            # 2. Kiểm tra trùng thời gian
-            existing_booking = Booking.query.filter_by(
-                staff_id=employee_id,
-                date=appointment_date,
-                time=appointment_time
-            ).filter(
-                Booking.status.in_([BookingStatus.PENDING, BookingStatus.CONFIRMED])
-            ).first()
-
-            if existing_booking:
-                validation_errors.append(f"⏰ Thời gian {appointment_time.strftime('%H:%M')} đã được đặt")
-
-        except Exception as e:
-            validation_errors.append(f"❌ Lỗi kiểm tra: {str(e)}")
-
-    # Nếu có lỗi validation, redirect về bước 3
     if validation_errors:
         for error in validation_errors:
             flash(error, "danger")
         return redirect(url_for('main_bp.booking_step3'))
 
     if form.validate_on_submit():
-        # === KIỂM TRA LẠI LẦN CUỐI TRƯỚC KHI LƯU
-        if employee_id and employee_id != 0:
-            try:
-                appointment_date = datetime.datetime.strptime(booking_data['date'], "%Y-%m-%d").date()
-                appointment_time = datetime.datetime.strptime(booking_data['time'], "%H:%M").time()
-
-                # Kiểm tra lại giới hạn
-                setting = Setting.query.first()
-                max_bookings = setting.max_booking_per_day if setting else 5
-
-                bookings_count = Booking.query.filter_by(
-                    staff_id=employee_id,
-                    date=appointment_date
-                ).filter(
-                    Booking.status.in_([BookingStatus.PENDING, BookingStatus.CONFIRMED])
-                ).count()
-
-                if bookings_count >= max_bookings:
-                    flash(f"❌ Nhân viên đã đầy lịch ({bookings_count}/{max_bookings} khách). Vui lòng đặt lại.",
-                          "danger")
-                    return redirect(url_for('main_bp.booking_step3'))
-
-                # Kiểm tra lại trùng thời gian
-                existing_booking = Booking.query.filter_by(
-                    staff_id=employee_id,
-                    date=appointment_date,
-                    time=appointment_time
-                ).filter(
-                    Booking.status.in_([BookingStatus.PENDING, BookingStatus.CONFIRMED])
-                ).first()
-
-                if existing_booking:
-                    flash(f"⏰ Thời gian này đã có khách đặt. Vui lòng chọn giờ khác.", "danger")
-                    return redirect(url_for('main_bp.booking_step4'))
-
-            except Exception as e:
-                flash(f"❌ Lỗi hệ thống: {str(e)}", "danger")
-                return redirect(url_for('main_bp.booking_step4'))
+        # --- Kiểm tra lại lần cuối trước khi lưu ---
+        valid, message = is_booking_valid(employee_id, appointment_date, appointment_time, [s.duration for s in services])
+        if not valid:
+            flash(message, "danger")
+            return redirect(url_for('main_bp.booking_step4'))
 
         # Tạo booking
         booking = Booking(
             customer_id=current_user.id if current_user.is_authenticated else None,
-            staff_id=employee_id if employee_id != 0 else None,
-            date=datetime.datetime.strptime(booking_data['date'], "%Y-%m-%d").date(),
-            time=datetime.datetime.strptime(booking_data['time'], "%H:%M").time(),
+            staff_id=employee_id,
+            date=appointment_date,
+            time=appointment_time,
             status=BookingStatus.PENDING,
             notes=form.notes.data,
             total_price=total_price
@@ -383,14 +331,13 @@ def booking_confirmation():
         db.session.add(booking)
         db.session.commit()
 
-        # Clear session
+        # Xóa session
         session.pop('booking', None)
 
         return render_template('booking/booking_success.html',
                                booking=booking,
                                services=services)
 
-    # Truyền validation errors cho template để hiển thị cảnh báo
     return render_template('booking/booking_confirmation.html',
                            form=form,
                            customer=customer_info,

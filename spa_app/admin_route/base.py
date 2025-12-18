@@ -25,11 +25,12 @@ class BaseIndexView(AdminIndexView):
             from flask import abort
             return abort(403)
 
-        from spa_app.dao import user_dao
+        from spa_app.dao import user_dao, services_dao
         user = user_dao.get_user_by_id(current_user.id)
         age = user_dao.get_age_user(user.DOB)
+        stats = services_dao.category_stats()
 
-        return self.render('admin/information.html', age=age, user=user)
+        return self.render('admin/information.html', age=age, user=user, stats=stats)
 
     @property
     def menu_title(self):

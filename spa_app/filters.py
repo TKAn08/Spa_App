@@ -1,5 +1,13 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
+
+def format_date_vietnamese(data):
+    weekdays_vi = ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ Nhật"]
+    data = data
+    results = []
+    for d in data:
+        results.append((weekdays_vi[d[0].weekday()], d[1]))
+    return results
 
 def format_currency(value):
     """

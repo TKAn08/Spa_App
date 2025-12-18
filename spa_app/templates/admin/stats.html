@@ -1,5 +1,53 @@
-{% extends 'admin/master.html' %}
+<div class="mt-4 shadow">
+    <div class="row g-3">
 
-{% block body %}
-<h3>THỐNG KÊ</h3>
-{% endblock %}
+        <!-- Lịch hẹn -->
+        <div class="col-md-3">
+            <div class="card text-white bg-primary h-100">
+                <div class="card-body position-relative">
+                    <i class="bi bi-calendar-event position-absolute top-0 end-0 m-3 fs-4"></i>
+                    <p class="mb-1">Lịch hẹn (theo tháng)</p>
+                    <h3 class="fw-bold">{{ booking_in_month }}</h3>
+                    <small>Hôm nay: {{ booking_in_day }}</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doanh thu -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body position-relative">
+                    <i class="bi bi-currency-dollar position-absolute top-0 end-0 m-3 fs-4"></i>
+                    <p class="mb-1">Doanh thu (theo tháng)</p>
+                    <h3 class="fw-bold"> {{ revenue_in_month }}</h3>
+                    <small>Hôm nay: {{ revenue_in_day }}</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khách hàng -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info h-100">
+                <div class="card-body position-relative">
+                    <i class="bi bi-people position-absolute top-0 end-0 m-3 fs-4"></i>
+                    <p class="mb-1">Khách hàng</p>
+                    <h3 class="fw-bold">{{ get_current_count_customer }}</h3>
+                    <small>Tổng khách hàng</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Đánh giá -->
+        <div class="col-md-3">
+            <div class="card text-white bg-warning h-100">
+                <div class="card-body position-relative">
+                    <i class="bi bi-star-fill position-absolute top-0 end-0 m-3 fs-4"></i>
+                    <p class="mb-1">Nhân viên</p>
+                    <h3 class="fw-bold">{{ get_current_count_employee }}</h3>
+                    <small>Tổng nhân viên đang hoạt động</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

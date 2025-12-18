@@ -69,6 +69,7 @@ class Admin(db.Model):
     note = Column(db.Text)
     user = relationship("User", backref="admin", uselist=False)
 
+
 class Cashier(db.Model):
     __tablename__ = "cashier"
     id = Column(Integer, ForeignKey("user.id"), primary_key=True)
@@ -78,6 +79,7 @@ class Cashier(db.Model):
     note = Column(db.Text)
     user = relationship("User", backref="cashier", uselist=False)
 
+
 class Receptionist(db.Model):
     __tablename__ = "receptionist"
     id = Column(Integer, ForeignKey("user.id"), primary_key=True)
@@ -86,6 +88,7 @@ class Receptionist(db.Model):
     salary = Column(Float)
     note = Column(db.Text)
     user = relationship("User", backref="receptionist", uselist=False)
+
 
 class Employee(db.Model):
     __tablename__ = "employee"
@@ -147,6 +150,7 @@ class BookingStatus(RoleEnum):
     CONFIRMED = "Confirmed"
     COMPLETED = "Completed"
     CANCELED = "Canceled"
+
 
 class PaymentStatus(RoleEnum):
     UNPAID = "Unpaid"
@@ -228,6 +232,7 @@ def create_role_record(mapper, connection, target):
     elif target.role == UserRole.CASHIER:
         connection.execute(Cashier.__table__.insert().values(id=target.id, cashier_code=f"CSH_{target.id:04d}"))
     elif target.role == UserRole.RECEPTIONIST:
-        connection.execute(Receptionist.__table__.insert().values(id=target.id, receptionist_code=f"REP_{target.id:04d}"))
+        connection.execute(
+            Receptionist.__table__.insert().values(id=target.id, receptionist_code=f"REP_{target.id:04d}"))
     elif target.role == UserRole.EMPLOYEE:
         connection.execute(Employee.__table__.insert().values(id=target.id, employee_code=f"EMP_{target.id:04d}"))

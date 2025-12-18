@@ -1,0 +1,89 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{% include 'admin/stats.html' %}
+<div class="row mt-5 shadow">
+    <div class="col-md-7 d-block">
+        <canvas id="revenueBarChart" width="600" height="400"></canvas>
+    </div>
+    <div class="col-md-5 d-block">
+        <canvas id="mostServiceDoughnutChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        //        Tạo Chart 1
+        window.onload = () => {
+            const date = [];
+            const revenues = [];
+
+        {% for r in get_revenue_each_day_in_week %}
+        date.push('{{ r[0] }}');
+        revenues.push('{{ r[1] }}');
+        {% endfor %}
+
+        // Chart bar
+        const ctx1 = document.getElementById('revenueBarChart');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: date,
+                datasets: [{
+                    label: 'Doanh thu trong tuần',
+                    data: revenues,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Chart doughnut
+        const servicesName = [];
+        const amounts = []
+
+        {% for s in get_top_3_services_in_month %}
+                servicesName.push('{{ s[0] }}')
+                amounts.push('{{ s[1] }}')
+        {% endfor %}
+        const ctx2 = document.getElementById('mostServiceDoughnutChart');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: servicesName,
+                datasets: [{
+                    label: 'Các dịch vụ được đặt nhiều trong tháng',
+                    data: amounts,
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)'
+                    ],
+                    hoverOffset: 4
+                }]
+            }
+        });
+        };
+
+    </script>
+</div>
+
+{% endblock %}

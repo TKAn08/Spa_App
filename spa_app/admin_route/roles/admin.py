@@ -4,11 +4,9 @@ from flask_admin import Admin, expose, BaseView
 
 from spa_app.admin_route.base import BaseLogoutView
 from spa_app.dao import services_dao
-from spa_app.dao.booking_dao import get_revenue_each_day_in_week
 from spa_app.models import UserRole, User, Service, Category, Booking, db
 from wtforms.fields.simple import TextAreaField, PasswordField
 from wtforms.widgets import TextArea
-from flask import current_app
 from flask_admin.theme import Bootstrap4Theme
 
 class AuthenticatedView(base.BaseAuthenticatedView):

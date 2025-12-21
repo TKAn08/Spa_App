@@ -4,7 +4,7 @@ from spa_app.admin_route import base
 from flask_admin.theme import Bootstrap4Theme
 from flask_admin.contrib.sqla import ModelView
 from spa_app.admin_route.roles.admin import Admin
-from spa_app.models import UserRole, Service, db, BookingStatus, Booking
+from spa_app.models import UserRole, Service, db, BookingStatus, Booking, PaymentStatus
 
 
 class AuthenticatedView(base.BaseAuthenticatedView):
@@ -19,7 +19,7 @@ class MyServiceView(AuthenticatedView, base.BaseServiceView):
     can_delete = False
     can_export = True
 
-class MyBookingView(ModelView):
+class MyBookingView(AuthenticatedView):
 
     column_list = (
         'id', 'customer', 'staff',
@@ -28,7 +28,7 @@ class MyBookingView(ModelView):
 
     exclude_columns = ('payment', 'booking_services')
     form_excluded_columns = ('payment', 'booking_services')
-
+    form_columns = ('status',)
     form_overrides = {
         'status': SelectField
     }
@@ -58,6 +58,7 @@ class MyBookingView(ModelView):
                 BookingStatus.PENDING,
                 BookingStatus.CONFIRMED,
                 BookingStatus.CANCELED,
+                PaymentStatus.UNPAID
             ])
         )
 
@@ -68,7 +69,8 @@ class MyBookingView(ModelView):
                 BookingStatus.PENDING,
                 BookingStatus.CONFIRMED,
                 BookingStatus.CANCELED,
-            ])
+            ]),
+            Booking.payment == PaymentStatus.UNPAID
         )
 
 

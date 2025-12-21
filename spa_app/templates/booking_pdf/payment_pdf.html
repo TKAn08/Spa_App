@@ -1,0 +1,57 @@
+{% extends 'booking_pdf/form_booking_pdf.html' %}
+{% block main %}
+<table class="table table-bordered border-2 border-dark align-middle">
+    <thead>
+    <tr class="text-center">
+        <th>STT</th>
+        <th>Dịch vụ</th>
+        <th>Giá</th>
+        <th>Giảm giá</th>
+        <th>VAT</th>
+        <th>Thành tiền</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for s in services_in_booking %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ s.name }}</td>
+        <td class="text-center">{{ s.price_display }}</td>
+        <td class="text-center">{{ s.price_in_discount_display }}</td>
+        <td class="text-center">{{ s.VAT_display }}</td>
+        <td class="text-center">{{ s.total_price_display }}</td>
+    </tr>
+
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td class="fw-bold fs-5">Tổng tiền</td>
+        <td class="text-center">{{ booking.sum_display[0] }}</td>
+        <td class="text-center">{{ booking.sum_display[1] }}</td>
+        <td class="text-center">{{ booking.sum_display[2] }}</td>
+        <td class="text-center">{{ booking.sum_display[3] }}</td>
+    </tr>
+    </tbody>
+</table>
+{% endblock %}
+
+{% block footer %}
+<div class="row m-5">
+    <!-- Cột trái: lời cảm ơn -->
+    <div class="col-6">
+        <strong>Cảm ơn quý khách!</strong><br>
+        Hẹn gặp lại tại Spa Beauty.
+    </div>
+
+    <!-- Cột phải: khách ký -->
+    <div class="col-6 text-center">
+        <div>Khách hàng</div>
+        <div style="margin-top: 50px; border-top: 1px dashed #000; width: 150px; margin-left: auto; margin-right: auto;"></div>
+    </div>
+</div>
+
+<!-- Dòng nhỏ phía dưới -->
+<div class="text-center m-5" style="font-size: 10px; color: #555;">
+    Phiếu này có giá trị khi khách hàng ký tên
+</div>
+{% endblock %}

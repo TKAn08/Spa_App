@@ -1,11 +1,18 @@
 from datetime import date, timedelta, datetime, time
-from spa_app.models import Booking, BookingStatus, PaymentStatus, db, Employee, User
+
+from flask import current_app
+
+from spa_app.models import Booking, BookingStatus, PaymentStatus, db, Employee, User, DiscountStatus
 from sqlalchemy import func
 today = date.today()
 #Lấy ngày đầu tuần này
 start_of_month = today.replace(day=1)
 #Lấy ngày cuối tuần này
 next_month = (start_of_month + timedelta(days=32)).replace(day=1)
+
+def get_booking_by_id(booking_id):
+    return Booking.query.filter(Booking.id == booking_id).first()
+
 
 def datetime_range(start_date, end_date):
     start = datetime.combine(start_date, time.min)
@@ -86,3 +93,23 @@ def get_current_count_employee():
         Employee.status == 'Đang làm',
         User.active == True
     ).scalar() or 0)
+
+def validate_discount_value(value):
+    if value < 0:
+        raise ValueError("Giảm giá không hợp lệ!")
+    elif value > current_app.config['MAX_DISCOUNT_VALUE']:
+        raise ValueError("Không có mã giảm giá nào vượt quá 20%")
+
+
+def apply_booking_discount(booking):
+    if isinstance(booking.discount_type, str):
+        booking.discount_type = DiscountStatus(booking.discount_type)
+
+    if isinstance(booking.payment, str):
+        booking.payment = PaymentStatus(booking.payment)
+
+    if booking.discount_type == DiscountStatus.NONE:
+        booking.discount_amount = booking.discount_value = 0
+    elif booking.discount_type == DiscountStatus.DISCOUNT:
+        validate_discount_value(booking.discount_value)
+        booking.discount_amount = (booking.total_price * (booking.discount_value / 100))

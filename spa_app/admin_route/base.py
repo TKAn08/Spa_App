@@ -15,6 +15,7 @@ class BaseAuthenticatedView(ModelView):
         from flask import abort
         return abort(403)
 
+
 class BaseIndexView(AdminIndexView):
     required_role = None
     @expose('/')

@@ -1,0 +1,40 @@
+{% extends 'booking_pdf/form_booking_pdf.html' %}
+
+{% block main %}
+<!-- THÔNG TIN DỊCH VỤ -->
+<h5 class="text-center fw-bold m-4">THÔNG TIN DỊCH VỤ</h5>
+
+<table class="table table-bordered border-2 border-dark align-middle">
+    <thead>
+    <tr class="text-center">
+        <th>STT</th>
+        <th>Dịch vụ</th>
+        <th>Thời lượng</th>
+        <th>Giá</th>
+        <th>Ghi chú</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for s in services_in_booking %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ s.name }}</td>
+        <td class="text-center">{{ s.duration }} phút</td>
+        <td class="text-center">{{ s.price_display }}</td>
+        <td></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
+
+{% block footer %}
+<div class="row m-4">
+    <div class="col-6 small">
+        Chúng tôi cam kết đem lại cho bạn những phút giây thoải mái nhất!
+    </div>
+    <div class="col-6 text-center fw-bold">
+        <h2>Beauty Spa</h2>
+    </div>
+</div>
+{% endblock %}

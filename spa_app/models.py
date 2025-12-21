@@ -10,11 +10,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # ENUM ROLES
 
 class UserRole(RoleEnum):
-    USER = "user"
-    ADMIN = "admin"
-    CASHIER = "cashier"
-    RECEPTIONIST = "receptionist"
-    EMPLOYEE = "employee"
+    USER = "USER"
+    ADMIN = "ADMIN"
+    CASHIER = "CASHIER"
+    RECEPTIONIST = "RECEPTIONIST"
+    EMPLOYEE = "EMPLOYEE"
 
 
 # BASE MODEL
@@ -125,7 +125,6 @@ class Service(Base):
     outstanding = Column(Boolean, default=False)
     category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
     description = Column(db.Text)
-
     category = relationship("Category", back_populates="services")
 
     service_bookings = relationship(
@@ -146,17 +145,19 @@ class Service(Base):
 # BOOKING STATUS ENUM
 
 class BookingStatus(RoleEnum):
-    PENDING = "Pending"
-    CONFIRMED = "Confirmed"
-    COMPLETED = "Completed"
-    CANCELED = "Canceled"
+    PENDING = "PENDING"
+    CONFIRMED = "CONFIRMED"
+    COMPLETED = "COMPLETED"
+    CANCELED = "CANCELED"
 
 
 class PaymentStatus(RoleEnum):
-    UNPAID = "Unpaid"
-    PAID = "Paid"
+    UNPAID = "UNPAID"
+    PAID = "PAID"
 
-
+class DiscountStatus(RoleEnum):
+    NONE = 'NONE'
+    DISCOUNT = 'DISCOUNT'
 # BOOKING SERVICE (association)
 
 class BookingService(db.Model):
@@ -201,6 +202,10 @@ class Booking(db.Model):
     customer = relationship("User", foreign_keys=[customer_id])
     staff = relationship("User", foreign_keys=[staff_id])
 
+    discount_type = Column(Enum(DiscountStatus), default=DiscountStatus.NONE, nullable=False)
+    #Tỉ lệ giảm
+    discount_value = Column(Float, default=0)
+    #Số tiền giảm
     booking_services = relationship(
         "BookingService",
         back_populates="booking",

@@ -1,17 +1,26 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-
+import pdfkit
 login = LoginManager()
 db = SQLAlchemy()
 
 
 def create_app():
     app = Flask(__name__)
-
+    #Tạo PDFKIT
+    app.config["PDF_KIT"] = pdfkit.configuration(
+        wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
+    )
+    #Thuế VAT 10%
+    app.config['VAT_RATE'] = 10
+    #Giảm giá tối đa 20%
+    app.config['MAX_DISCOUNT_VALUE'] = 20
+    #Truy cập MySQL WorkBench
     app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:35715982@localhost/spadb?charset=utf8mb4"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config['SECRET_KEY'] = "ADSSAFAMKLMKASFMIO"
+    #Tạo paginate
     app.config["PAGE_SIZE"] = 3
     db.init_app(app)
     login.init_app(app)

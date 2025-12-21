@@ -105,6 +105,12 @@ def staff_view():
 @main_bp.route('/booking/step1', methods=['GET', 'POST'])
 def booking_step1():
     form = BookingStep1Form()
+
+    if request.method == 'GET' and current_user.is_authenticated:
+        form.name.data = current_user.name
+        form.phone_number.data = current_user.phone_number
+        form.address.data = current_user.address
+
     if form.validate_on_submit():
         session['booking'] = {
             'name': form.name.data,

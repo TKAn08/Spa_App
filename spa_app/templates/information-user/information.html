@@ -1,124 +1,151 @@
-{%extends 'information-user/base.html' %}
-{% block title %}THông tin tài khoản{% endblock %}
+{% extends 'information-user/base.html' %}
+{% block title %}Thông tin tài khoản{% endblock %}
+
 {% block content %}
 <div class="title d-flex gap-3 align-items-center justify-content-between">
     <h1 class="text-primary my-3">THÔNG TIN TÀI KHOẢN</h1>
-    <button class="btn btn-primary px-4 py-2 me-5" data-bs-toggle="modal" data-bs-target="#myModal">Thay đổi thông tin
+    <button class="btn btn-primary px-4 py-2 me-5"
+            data-bs-toggle="modal"
+            data-bs-target="#myModal">
+        Thay đổi thông tin
     </button>
 
-    <!-- The Modal -->
+    <!-- Modal -->
     <div class="modal fade" id="myModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-
-                <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Thay đổi thông tin</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <form method="post" class="was-validated" action="/{{current_user.username}}?tab=information">
-                    <!-- Modal body -->
+                <form method="post"
+                      class="was-validated"
+                      action="/{{ current_user.username }}?tab=information">
                     <div class="row">
                         <div class="my-3 mx-3 col-md-8">
-                            <label for="name" class="form-label">Nhập họ và tên:</label>
-                            <input type="text" class="form-control" id="name" placeholder="Nhập họ và tên" name="name"
-                                   required>
-                            <div class="valid-feedback">Hợp lệ.</div>
-                            <div class="invalid-feedback">Vui lòng điền vào ô trống</div>
+                            <label class="form-label">Nhập họ và tên:</label>
+                            <input type="text" class="form-control" name="name" required>
                         </div>
+
                         <div class="my-3 mx-3 col-md-3">
-                            <label for="gender" class="form-label">Giới tính</label>
-                            <select class="form-select" id="gender" name="gender" required>
+                            <label class="form-label">Giới tính</label>
+                            <select class="form-select" name="gender" required>
                                 <option value="" disabled selected>Chọn giới tính</option>
                                 <option value="Nam">Nam</option>
                                 <option value="Nữ">Nữ</option>
                             </select>
-                            <div class="valid-feedback">Hợp lệ.</div>
-                            <div class="invalid-feedback">Vui lòng chọn</div>
                         </div>
                     </div>
 
                     <div class="mb-3 mx-3">
-                        <label for="DOB" class="form-label">Ngày sinh:</label>
-                        <input type="date" class="form-control" id="DOB" placeholder="Chọn ngày sinh" name="dob"
-                               required>
-                        <div class="valid-feedback">Hợp lệ.</div>
-                        <div class="invalid-feedback">Vui lòng điền vào ô trống</div>
+                        <label class="form-label">Ngày sinh:</label>
+                        <input type="date" class="form-control" name="dob" required>
                     </div>
 
                     <div class="row">
                         <div class="my-3 mx-3 col-md-8">
-                            <label for="address" class="form-label">Địa chỉ:</label>
-                            <input type="text" class="form-control" id="address" placeholder="Địa chỉ:" name="address"
-                                   required>
-                            <div class="valid-feedback">Hợp lệ.</div>
-                            <div class="invalid-feedback">Vui lòng điền vào ô trống</div>
+                            <label class="form-label">Địa chỉ:</label>
+                            <input type="text" class="form-control" name="address" required>
                         </div>
+
                         <div class="my-3 mx-3 col-md-3">
-                            <label for="phone-number" class="form-label">SĐT:</label>
-                            <input type="text" class="form-control" id="phone-number" placeholder="Số điện thoại"
-                                   name="phone-number"
-                                   required>
-                            <div class="valid-feedback">Hợp lệ.</div>
-                            <div class="invalid-feedback">Vui lòng điền vào ô trống</div>
+                            <label class="form-label">SĐT:</label>
+                            <input type="text" class="form-control" name="phone-number" required>
                         </div>
                     </div>
 
-                    <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Xác nhận</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                            Đóng
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            Xác nhận
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-
 </div>
 
-
+<!-- THÔNG TIN USER -->
 <div class="row my-3 fs-5">
-    <div class=" col-md-8">
+    <div class="col-md-8">
         <div class="row">
             <div class="col-6">
-                <div class="p-2"><span class="fw-bold">Họ và tên: </span>{{current_user.name}}</div>
-                <div class="p-2"><span class="fw-bold">Tên tài khoản: </span>{{current_user.username}}</div>
-                <div class="p-2"><span class="fw-bold">SĐT: </span>{{current_user.phone_number}}</div>
-                <div class="p-2"><span class="fw-bold">Địa chỉ: </span>{{current_user.address}}</div>
+                <div class="p-2"><b>Họ và tên:</b> {{ current_user.name }}</div>
+                <div class="p-2"><b>Tên tài khoản:</b> {{ current_user.username }}</div>
+                <div class="p-2"><b>SĐT:</b> {{ current_user.phone_number }}</div>
+                <div class="p-2"><b>Địa chỉ:</b> {{ current_user.address }}</div>
             </div>
             <div class="col-6">
-                <div class="p-2"><span class="fw-bold">Giới tính: </span>{{current_user.gender}}</div>
-                <div class="p-2"><span class="fw-bold">Tuổi: </span>{{age}}</div>
-                <div class="p-2"><span class="fw-bold">Ngày tạo tài khoản: </span>{{current_user.created_date}}</div>
+                <div class="p-2"><b>Giới tính:</b> {{ current_user.gender }}</div>
+                <div class="p-2"><b>Tuổi:</b> {{ age }}</div>
+                <div class="p-2"><b>Ngày tạo:</b> {{ current_user.created_date }}</div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <img src="#" class="mx-auto d-block">
-    </div>
 </div>
-<div>
-    <hr class="dropdown-divider">
-</div>
+
+<hr>
 
 <h2 class="text-muted">THÔNG TIN ĐẶT LỊCH</h2>
 
-<script>
-    {% if session.get('modal-message') %}
-        document.addEventListener("DOMContentLoaded", function () {
-        var updateModel = document.getElementById('updateModal');
-        var modal = new bootstrap.Modal(updateModel);
+{% if bookings %}
+<table class="table table-bordered table-hover mt-3">
+    <thead class="table-light">
+    <tr>
+        <th>Mã</th>
+        <th>Ngày</th>
+        <th>Giờ</th>
+        <th>Nhân viên</th>
+        <th>Trạng thái</th>
+        <th>Tổng tiền</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
 
-        var modalContent = document.getElementById('modalContent');
-        modalContent.innerHTML = "{{ session.get('modal-message') }}";
-        modal.show()
-    });
-        {% set _ = session.pop('modal-message') %}
-    {% endif %}
-</script>
+    <tbody>
+    {% for booking in bookings %}
+    <tr>
+        <td>#{{ booking.id }}</td>
+        <td>{{ booking.date.strftime('%d/%m/%Y') }}</td>
+        <td>{{ booking.time.strftime('%H:%M') }}</td>
 
+        <td>
+            {% if booking.staff %}
+                {{ booking.staff.name }}
+            {% else %}
+                —
+            {% endif %}
+        </td>
+
+        <td>
+            <span class="badge
+                {% if booking.status.value == 'PENDING' %}bg-warning
+                {% elif booking.status.value == 'CONFIRMED' %}bg-success
+                {% elif booking.status.value == 'CANCELLED' %}bg-danger
+                {% else %}bg-secondary{% endif %}">
+                {{ booking.status.value }}
+            </span>
+        </td>
+
+        <td>{{ "{:,.0f}".format(booking.total_price) }} đ</td>
+
+        <td>
+            <a href="{{ url_for('main_bp.booking_detail', booking_id=booking.id) }}"
+               class="btn btn-sm btn-outline-primary">
+                Xem
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-muted fst-italic mt-3">
+    Bạn chưa có lịch đặt nào.
+</p>
+{% endif %}
 {% endblock %}
-
-

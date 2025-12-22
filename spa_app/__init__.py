@@ -17,7 +17,7 @@ def create_app():
     #Giảm giá tối đa 20%
     app.config['MAX_DISCOUNT_VALUE'] = 20
     #Truy cập MySQL WorkBench
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:35715982@localhost/spadb?charset=utf8mb4"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:123456@localhost/spadb?charset=utf8mb4"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config['SECRET_KEY'] = "ADSSAFAMKLMKASFMIO"
     #Tạo paginate

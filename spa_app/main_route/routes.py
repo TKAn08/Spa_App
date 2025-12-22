@@ -78,8 +78,19 @@ def user_profile(username):
         template = 'information-user/change-password.html'
     else:
         template = 'information-user/information.html'
+    # ===== BOOKINGS OF CURRENT USER =====
+    bookings = Booking.query.filter_by(customer_id=current_user.id) \
+        .order_by(Booking.date.desc(), Booking.time.desc()) \
+        .all()
 
-    return render_template(template, username=username, tab=tab, age=age, message=message)
+    return render_template(
+        template,
+        username=username,
+        tab=tab,
+        age=age,
+        message=message,
+        bookings=bookings
+    )
 
 
 @main_bp.route('/service/<int:id>', methods=['GET', 'POST'])

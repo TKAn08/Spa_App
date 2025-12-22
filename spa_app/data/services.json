@@ -1,5 +1,5 @@
 [
-  {"image": "https://ybspa.vn/wp-content/uploads/cac-buoc-cham-soc-da-co-ban-tai-spa-5.jpg",
+  {"image": "https://res.cloudinary.com/ds5ce5otv/image/upload/v1765429721/30-csd-sau-dtri-mun-peel_pi7t1f.png",
   "price":  200000,
     "duration" : 75,
     "category_id" : 1,
@@ -8,7 +8,7 @@
     "outstanding": 1,
     "active" : true
   },
-  {"image":  "https://misstram.edu.vn/wp-content/uploads/2019/10/nan-mun.jpg",
+  {"image":  "https://res.cloudinary.com/ds5ce5otv/image/upload/v1765429697/lan-kim-tri-seo-ro-1_xthq4t.png",
   "price":  200000,
     "duration" : 60,
     "category_id" : 1,
@@ -17,7 +17,7 @@
     "outstanding": 1,
     "active" : true
   },
-    {"image":  "https://edbeauty.net/wp-content/uploads/2018/03/cham-soc-phuc-hoi-da-1-898x600.jpg",
+    {"image":  "https://res.cloudinary.com/ds5ce5otv/image/upload/v1765429669/phuc-hoi-da-chuyen-sau-bang-enzym-2_ggsoei.png",
   "price":  500000,
     "duration" : 120,
     "category_id" : 1,
@@ -26,7 +26,7 @@
     "outstanding": 1,
     "active" : true
   },
-    {"image":  "https://thammydrd.vn/wp-content/uploads/2019/01/phuc-hoi-da-chuyen-sau-bang-enzym-2.png",
+    {"image":  "https://res.cloudinary.com/ds5ce5otv/image/upload/v1765429632/cham-soc-phuc-hoi-da-1-898x600_mxuyc5.jpg",
   "price":  650000,
     "duration" : 90,
     "category_id" : 1,
@@ -35,7 +35,7 @@
     "outstanding": 1,
     "active" : true
   },
-    {"image":  "https://o2skin.vn/wp-content/uploads/2024/05/lan-kim-tri-seo-ro-1.png",
+    {"image":  "https://res.cloudinary.com/ds5ce5otv/image/upload/v1765429577/nan-mun_diuy4j.jpg",
   "price":  1500000,
     "duration" : 80,
     "category_id" : 1,
@@ -43,7 +43,7 @@
     "name" : "Điều trị sẹo rỗ",
     "active" : true
   },
-    {"image":  "https://o2skin.vn/wp-content/uploads/2021/12/30-csd-sau-dtri-mun-peel.png",
+    {"image":  "https://res.cloudinary.com/ds5ce5otv/image/upload/v1765429519/cac-buoc-cham-soc-da-co-ban-tai-spa-5_lesoum.jpg",
   "price":  950000,
     "duration" : 75,
     "category_id" : 1,

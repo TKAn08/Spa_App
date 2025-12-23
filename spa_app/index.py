@@ -1,7 +1,7 @@
 from flask_login import current_user, login_required
 from spa_app.dao import booking_dao
 from spa_app import create_app
-from spa_app.models import DiscountStatus
+from spa_app.dao import employee_dao
 
 app = create_app()
 
@@ -12,5 +12,6 @@ def whoami():
 
 if __name__ == '__main__':
     with app.app_context():
-        data = booking_dao.get_booking_by_id(1)
+        data = employee_dao.get_top_5_best_employee_in_month()
+        print(data)
         app.run(host="127.0.0.1", port=5001, debug=True)

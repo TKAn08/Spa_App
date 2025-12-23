@@ -196,16 +196,19 @@ class Booking(db.Model):
 
     status = Column(Enum(BookingStatus), default=BookingStatus.PENDING)
     payment = Column(Enum(PaymentStatus), default=PaymentStatus.UNPAID)
-    notes = Column(db.Text)
     total_price = Column(Float, default=0)
 
     customer = relationship("User", foreign_keys=[customer_id])
     staff = relationship("User", foreign_keys=[staff_id])
 
-    discount_type = Column(Enum(DiscountStatus), default=DiscountStatus.NONE, nullable=False)
     #Tỉ lệ giảm
     discount_value = Column(Float, default=0)
     #Số tiền giảm
+    discount_amount = Column(Float)
+    #Số tiền cuối cùng (Tính cả mã và thuế VAT)
+    final_price = Column(Float, default=total_price)
+    discount_type = Column(Enum(DiscountStatus), default=DiscountStatus.NONE)
+    notes = Column(db.Text)
     booking_services = relationship(
         "BookingService",
         back_populates="booking",

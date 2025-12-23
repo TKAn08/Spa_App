@@ -23,6 +23,30 @@ def count_bookings_in_month():
     start, end = datetime_range(start_of_month, next_month)
     return get_count_booking_by_time(start, end)
 
+def count_completed_booking_in_month():
+    start, end = datetime_range(start_of_month, next_month)
+    return Booking.query.filter(
+        Booking.status == BookingStatus.COMPLETED,
+        Booking.created_date >= start,
+        Booking.created_date < end
+    ).count()
+
+def count_pending_booking_in_month():
+    start, end = datetime_range(start_of_month, next_month)
+    return Booking.query.filter(
+        Booking.status == BookingStatus.PENDING,
+        Booking.created_date >= start,
+        Booking.created_date < end
+    ).count()
+
+def count_canceled_booking_in_month():
+    start, end = datetime_range(start_of_month, next_month)
+    return Booking.query.filter(
+        Booking.status == BookingStatus.CANCELED,
+        Booking.created_date >= start,
+        Booking.created_date < end
+    ).count()
+
 def count_bookings_in_day():
     tomorrow = datetime.today() + timedelta(days=1)
     start, end = datetime_range(today, tomorrow)
@@ -31,7 +55,7 @@ def count_bookings_in_day():
 def get_count_booking_by_time(start, end):
     return Booking.query.filter(
         Booking.created_date >= start,
-        Booking.created_date <= end
+        Booking.created_date < end
     ).count()
 
 #Tính tổng doanh thu tháng
@@ -49,7 +73,7 @@ def get_revenue_in_day():
 #Truy vấn tổng doanh thu theo thời gian(Hàm chung)
 def get_revenue_by_time(start, end):
     return db.session.query(
-        func.sum(Booking.total_price)
+        func.sum(Booking.final_price)
     ).filter(
         Booking.created_date >= start,
         Booking.created_date < end,
@@ -62,7 +86,7 @@ def get_revenue_each_day_in_week():
     end = start + timedelta(days=7)
     return db.session.query(
         func.date(Booking.created_date),
-        func.sum(Booking.total_price)
+        func.sum(Booking.final_price)
     ).filter(
         Booking.created_date >= start,
         Booking.created_date < end,
@@ -95,21 +119,27 @@ def get_current_count_employee():
     ).scalar() or 0)
 
 def validate_discount_value(value):
+    if value is None:
+        raise ValueError("Vui lòng nhập giá trị giảm giá")
+
+    value = float(value)
+
     if value < 0:
-        raise ValueError("Giảm giá không hợp lệ!")
-    elif value > current_app.config['MAX_DISCOUNT_VALUE']:
-        raise ValueError("Không có mã giảm giá nào vượt quá 20%")
+        raise ValueError("Giảm giá không hợp lệ")
+
+    max_value = current_app.config.get('MAX_DISCOUNT_VALUE', 20)
+
+    if value > max_value:
+        raise ValueError(f"Giảm giá tối đa {max_value}%")
 
 
 def apply_booking_discount(booking):
-    if isinstance(booking.discount_type, str):
-        booking.discount_type = DiscountStatus(booking.discount_type)
-
-    if isinstance(booking.payment, str):
-        booking.payment = PaymentStatus(booking.payment)
-
     if booking.discount_type == DiscountStatus.NONE:
-        booking.discount_amount = booking.discount_value = 0
+        booking.discount_value = 0
+        booking.discount_amount = 0
+
     elif booking.discount_type == DiscountStatus.DISCOUNT:
         validate_discount_value(booking.discount_value)
-        booking.discount_amount = (booking.total_price * (booking.discount_value / 100))
+        booking.discount_amount = (
+                booking.total_price * booking.discount_value / 100
+        )

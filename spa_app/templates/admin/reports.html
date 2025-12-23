@@ -17,52 +17,38 @@
             const revenues = [];
 
         {% for r in get_revenue_each_day_in_week %}
-        date.push('{{ r[0] }}');
+date.push('{{ r[0] }}');
         revenues.push('{{ r[1] }}');
         {% endfor %}
 
-        // Chart bar
-        const ctx1 = document.getElementById('revenueBarChart');
+        // Chart line
+        const ctx1 = document.getElementById('revenueBarChart').getContext('2d');
         new Chart(ctx1, {
-            type: 'bar',
+            type: "line",
             data: {
-                labels: date,
+                labels: date, // dùng mảng ngày
                 datasets: [{
-                    label: 'Doanh thu trong tuần',
+                    label: "Doanh thu", // nhãn hiển thị trên legend/tooltip
                     data: revenues,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)'
-                    ],
-                    borderWidth: 1
+                    borderColor: "red",
+                    fill: false
                 }]
             },
             options: {
-                scales: { y: { beginAtZero: true } }
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
             }
         });
-
         // Chart doughnut
         const servicesName = [];
         const amounts = []
 
         {% for s in get_top_3_services_in_month %}
                 servicesName.push('{{ s[0] }}')
-                amounts.push('{{ s[1] }}')
+        amounts.push('{{ s[1] }}')
         {% endfor %}
         const ctx2 = document.getElementById('mostServiceDoughnutChart');
         new Chart(ctx2, {
@@ -84,6 +70,85 @@
         };
 
     </script>
+</div>
+
+<div class="row mt-4 g-3">
+    <div class="col-md-4 p-3 shadow">
+        <h4>Trạng thái lịch đặt theo tháng</h4>
+
+        <div class="p-2 d-flex justify-content-between align-items-center status-row">
+            <span class="fw-bold">Hoàn thành:</span>
+            <span>{{ completed_booking_in_month }}</span>
+        </div>
+
+        <div class="p-2 d-flex justify-content-between align-items-center status-row">
+            <span class="fw-bold">Đang chờ:</span>
+            <span>{{ pending_booking_in_month }}</span>
+        </div>
+
+        <div class="p-2 d-flex justify-content-between align-items-center status-row">
+            <span class="fw-bold">Hủy bỏ:</span>
+            <span>{{ canceled_booking_in_month }}</span>
+        </div>
+    </div>
+
+    <div class="col-md-8 p-3 shadow">
+        <canvas id="top5BestStaffInMonth"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <script>
+        const xValues = [];
+        const yValues = [];
+        Chart.register(ChartDataLabels);
+
+        {% for staff in get_top_5_best_staff_in_month %}
+        xValues.push('{{ staff[1]|e }}');   // tên nhân viên
+        yValues.push({{ staff[2] }});       // số lượng booking (number)
+        {% endfor %}
+
+        const ctx3 = document.getElementById('top5BestStaffInMonth');
+
+        new Chart(ctx3, {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    label: "Số lượng lịch hoàn thành", // tên chung dataset
+                    data: yValues,
+                    backgroundColor: ["red", "green", "blue", "orange", "brown"]
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: true },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw + ' lịch';
+                            }
+                        }
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: function(value, context) {
+                            return value + ' lịch'; // hiển thị ngay trên cột
+                        },
+                        font: { weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 } // đảm bảo hiển thị số nguyên
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    </script>
+
 </div>
 
 {% endblock %}

@@ -1,4 +1,3 @@
-
 from flask import url_for, make_response, abort
 from flask_login import login_required, current_user
 from markupsafe import Markup
@@ -15,8 +14,10 @@ from spa_app.models import UserRole, BookingStatus, Booking, db, PaymentStatus
 class AuthenticatedView(base.BaseAuthenticatedView):
     required_role = UserRole.EMPLOYEE
 
+
 class MyEmployeeIndexView(base.BaseIndexView):
     required_role = UserRole.EMPLOYEE
+
 
 class MyServiceView(AuthenticatedView, base.BaseServiceView):
     can_create = False
@@ -25,21 +26,12 @@ class MyServiceView(AuthenticatedView, base.BaseServiceView):
     can_export = True
 
 
-def PrintBookingPDF(view, context, model, name):
-    if model.status == BookingStatus.COMPLETED:
-        url = url_for(
-            "admin_bp.export_booking_pdf",
-            booking_id=model.id
-        )
-        return Markup(
-            f'<a class="btn btn-sm btn-info" href="{url}" target="_blank">In phiếu dịch vụ</a>'
-        )
-    return ""
 
 class MyBookingView(AuthenticatedView):
     can_create = False
     can_delete = False
     can_export = False
+    column_default_sort = ('created_date', True)
 
     column_list = (
         'id', 'customer', 'staff',
@@ -49,37 +41,32 @@ class MyBookingView(AuthenticatedView):
     exclude_columns = ('booking_services',)
     form_columns = ('status',)
 
-    form_overrides = {
-        'status': SelectField
-    }
-    form_args = {
-        'status': {
-            'choices': [
-                (BookingStatus.COMPLETED.value, 'Completed'),
-                (BookingStatus.CANCELED.value, 'Canceled')
-            ],
-        }
-    }
+
     column_formatters = {
-        'print_booking_pdf': PrintBookingPDF
+        'print_booking_pdf': base.print_pdf_button_formatter("In phiếu dịch vụ", 'admin_bp.export_booking_pdf'),
+        'status': base.format_booking_status,
     }
 
     column_labels = {
         'print_booking_pdf': 'Phiếu dịch vụ'
     }
     form_excluded_columns = ('payment', 'booking_services', 'status')
+
     def get_query(self):
         query = super().get_query()
+        query = base.filter_today(query)
         return query.filter(
             Booking.status.in_([
                 BookingStatus.CONFIRMED,
                 BookingStatus.COMPLETED,
-            ])
+            ]),
+            Booking.payment == PaymentStatus.UNPAID
         )
 
-    #Load lại paginate
+    # Load lại paginate
     def get_count_query(self):
         query = super().get_count_query()
+        query = base.filter_today(query)
         return query.filter(
             Booking.status.in_([
                 BookingStatus.CONFIRMED,
@@ -89,10 +76,7 @@ class MyBookingView(AuthenticatedView):
         )
 
 
-
-
 def init_employee(app):
-
     from spa_app.dao import booking_dao, user_dao
     from spa_app.filters import format_currency
     @admin_bp.route("/booking/<int:booking_id>/booking-sheet")
@@ -101,7 +85,7 @@ def init_employee(app):
         booking = booking_dao.get_booking_by_id(booking_id)
         services_in_booking = services_dao.get_services_in_booking(booking.id)
 
-        #Tạo biến mới để hiển thị giá trị string currency dưới dạng VND
+        # Tạo biến mới để hiển thị giá trị string currency dưới dạng VND
         for s in services_in_booking:
             s.price_display = format_currency(s.price)
 
@@ -114,7 +98,7 @@ def init_employee(app):
         if booking.status != BookingStatus.COMPLETED:
             abort(403)
 
-        #Tạo pdf
+        # Tạo pdf
         from spa_app.export_file import export_pdf_from_url
         pdf = export_pdf_from_url(
             'booking_pdf/service_order_pdf.html',
@@ -130,7 +114,6 @@ def init_employee(app):
             f"inline; filename=booking_{booking_id}.pdf"
         )
         return response
-
 
     employee_index = MyEmployeeIndexView(url="/employee/", endpoint="employee_index", name="Thông tin")
     employee = Admin(

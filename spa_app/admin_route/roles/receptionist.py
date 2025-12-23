@@ -1,8 +1,6 @@
-from wtforms.fields.choices import SelectField
 
 from spa_app.admin_route import base
 from flask_admin.theme import Bootstrap4Theme
-from flask_admin.contrib.sqla import ModelView
 from spa_app.admin_route.roles.admin import Admin
 from spa_app.models import UserRole, Service, db, BookingStatus, Booking, PaymentStatus
 
@@ -20,28 +18,23 @@ class MyServiceView(AuthenticatedView, base.BaseServiceView):
     can_export = True
 
 class MyBookingView(AuthenticatedView):
+    can_create = False
+    can_delete = False
+    can_export = False
+    column_default_sort = ('created_date', True)
 
     column_list = (
         'id', 'customer', 'staff',
         'date', 'time', 'status', 'notes', 'total_price'
     )
+    column_formatters = {
+        'status': base.format_booking_status,
+    }
 
     exclude_columns = ('payment', 'booking_services')
     form_excluded_columns = ('payment', 'booking_services')
     form_columns = ('status',)
-    form_overrides = {
-        'status': SelectField
-    }
 
-    form_args = {
-        'status': {
-            'choices': [
-                (BookingStatus.PENDING.value, 'Pending'),
-                (BookingStatus.CONFIRMED.value, 'Confirmed'),
-                (BookingStatus.CANCELED.value, 'Canceled')
-            ],
-        }
-    }
 
     # column_extra_row_actions = [
     #     EndpointLinkRowAction(
@@ -64,6 +57,7 @@ class MyBookingView(AuthenticatedView):
 
     def get_count_query(self):
         query = super().get_count_query()
+        query = base.filter_from_today(query)
         return query.filter(
             Booking.status.in_([
                 BookingStatus.PENDING,
@@ -72,8 +66,6 @@ class MyBookingView(AuthenticatedView):
             ]),
             Booking.payment == PaymentStatus.UNPAID
         )
-
-
 
 def init_receptionist(app):
     receptionist_index = MyReceptionistIndexView(url="/receptionist/", endpoint="receptionist_index", name="Thông tin")

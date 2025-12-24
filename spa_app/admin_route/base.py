@@ -85,6 +85,8 @@ def format_status(text, color):
 
     )
 
+def format_description(view, context, model, name):
+    return Markup(model.description)
 
 def format_booking_status(view, context, model, name):
     if model.status == BookingStatus.PENDING:
@@ -113,7 +115,6 @@ class BaseIndexView(AdminIndexView):
         user = user_dao.get_user_by_id(current_user.id)
         age = user_dao.get_age_user(user.DOB)
         stats = services_dao.category_stats()
-
         return self.render('admin/information.html', age=age, user=user, stats=stats)
 
     @property

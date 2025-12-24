@@ -12,6 +12,4 @@ def whoami():
 
 if __name__ == '__main__':
     with app.app_context():
-        data = employee_dao.get_top_5_best_employee_in_month()
-        print(data)
         app.run(host="127.0.0.1", port=5001, debug=True)

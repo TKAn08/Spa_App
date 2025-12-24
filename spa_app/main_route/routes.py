@@ -3,14 +3,13 @@ from flask import render_template, Blueprint, request, redirect, session, jsonif
 from flask_login import login_required, current_user
 import math
 from spa_app import db
-from spa_app.admin_route.roles import employee
 from spa_app.dao.user_dao import get_age_user, change_password
 from spa_app.dao import services_dao, user_dao, employee_dao
 from spa_app.forms.booking_form import BookingConfirmForm, BookingStep4Form, BookingStep3Form, BookingStep2Form, \
     BookingStep1Form
+from spa_app.helpers import cloudinary_helpers
 from spa_app.models import Setting, Booking, User, BookingStatus, Service, Employee, Category  # THÊM Category
 from spa_app.helpers.booking_helpers import is_booking_valid, auto_assign_employee
-
 main_bp = Blueprint('main_bp', __name__)
 
 
@@ -23,7 +22,7 @@ def index():
 @main_bp.route('/service', methods=['GET', 'POST'])
 def services_view():
     page = request.args.get('page', 1, type=int)
-    cate_id = request.args.get('cate_id', 1, type=int)
+    cate_id = request.args.get('cate_id', None, type=int)
     search = request.args.get('search', None, type=str)
     services = services_dao.load_services(page=page, cate_id=cate_id, search=search)
     categories = services_dao.load_categories()
@@ -62,16 +61,19 @@ def user_profile(username):
         dob = request.form.get('dob')
         address = request.form.get('address')
         phone_number = request.form.get('phone-number')
-
+        avatar_file = request.files.get('avatar')
         if (user_dao.check_invalid_phone_number(phone_number)):
             message = "Thay đổi tin thất bại, số điện thoại đã được đăng ký !"
-            # session['modal-type'] = 'error'
 
 
         else:
+            #Gán vào biến avatar
+            avatar = cloudinary_helpers.import_to_cloudinary(avatar_file)
+
             message = "Thay đổi thông tin thành công !"
-            user_dao.change_information(current_user, name, gender, dob, address, phone_number)
-            # session['modal-type'] = 'success'
+            user_dao.change_information(current_user, name, gender, dob, address, phone_number, avatar)
+
+        #Lưu message success hoặc error để xử lý
         session['modal-message'] = message
 
     if tab == 'change_password':

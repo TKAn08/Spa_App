@@ -20,12 +20,61 @@ body {
 }
 
 .menu a.active, .menu a:hover {
-    background-color: #007bff;
+    background-color: .007bff;
     color: white;
 }
 
 .flash-message {
     positon: absolute;
     width: 100%;
+}
+
+.avt-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.avt-container img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover
+}
+
+.avt-container div.overlay {
+    position: absolute;
+    inset: 0;
+    font-size: 2rem;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    border-radius: 50%;
+    transition: opacity 0.2s;
+}
+
+/* 🖥️ Desktop: hover mới hiện */
+@media (hover: hover) {
+    .avt-container .overlay {
+        opacity: 0;
+    }
+
+    .avt-container:hover .overlay {
+        opacity: 1;
+    }
+}
+
+/* 📱 Mobile: luôn hiện */
+@media (hover: none) {
+    .avt-container .overlay {
+        opacity: 1;
+    }
+}
+
+.avt-container input {
+    display: none;
 }
 

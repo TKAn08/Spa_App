@@ -10,6 +10,7 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
     <title>Đăng nhập</title>
 </head>
 <body>
@@ -20,9 +21,17 @@
 <div class="container">
     <form action="/admin-login" id="form-login-admin" method="post">
 
-        <h2>Trang đăng nhập quản trị viên</h2>
-        <input name="username" type="text" placeholder="Tên đăng nhập" required>
-        <input name="password" type="password" placeholder="Mật khẩu" required>
+        <h2 class="text-center">Trang đăng nhập quản trị viên</h2>
+        <input name="username" value="{{ saver_username or '' }}"type="text" placeholder="Tên đăng nhập" required>
+        <div class="position-relative">
+            <input name="password" class="password-input" type="password" placeholder="Mật khẩu" required>
+            <button type="button"
+                    class="position-absolute top-50 end-0 translate-middle-y mt-1 me-1"
+                    style="border: none; background-color: transparent; padding: 0;"
+                    onclick="togglePassword(this)">
+                👁
+            </button>
+        </div>
         <select name="role" required>
             <option value="ADMIN">Admin</option>
             <option value="CASHIER">Cashier</option>
@@ -37,5 +46,6 @@
         </div>
     </form>
 </div>
+<script src="{{ url_for('static', filename='javascript/login.js') }}"></script>
 </body>
 </html>

@@ -29,7 +29,10 @@ class Base(db.Model):
     def __str__(self):
         return self.name
 
-
+    def isActive(self):
+        if self.active:
+            return "Kích hoạt"
+        return None;
 # USER
 
 class User(Base, UserMixin):
@@ -42,7 +45,7 @@ class User(Base, UserMixin):
     DOB = Column(DateTime)
     address = Column(String(150))
     phone_number = Column(String(12), nullable=False)
-    image = Column(String(255))
+    avatar = Column(String(255), default='https://cdn-icons-png.flaticon.com/512/847/847969.png')
     role = Column(Enum(UserRole), default=UserRole.USER)
 
     @staticmethod
@@ -57,6 +60,12 @@ class User(Base, UserMixin):
 
     def __str__(self):
         return self.name
+
+    @property
+    def isEmployee(self):
+        emp = Employee.query.filter_by(id=self.id).first()
+        return emp.status if emp else None
+
 
 
 # ROLE TABLES
@@ -119,7 +128,7 @@ class Category(Base):
 class Service(Base):
     __tablename__ = 'service'
 
-    image = Column(String(255), default='/static/images/default_service.png')
+    image = Column(String(255), default="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg")
     price = Column(Float)
     duration = Column(Integer)
     outstanding = Column(Boolean, default=False)
@@ -222,6 +231,7 @@ class Booking(db.Model):
         back_populates="bookings",
         overlaps="booking_services,service_bookings"
     )
+
 
 
 # SETTINGS

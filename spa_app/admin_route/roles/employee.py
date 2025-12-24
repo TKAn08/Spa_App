@@ -35,9 +35,20 @@ class MyBookingView(AuthenticatedView):
 
     column_list = (
         'id', 'customer', 'staff',
-        'date', 'time', 'status', 'payment', 'notes', 'total_price', 'print_booking_pdf'
+        'date', 'time', 'status',  'total_price', 'notes', 'print_booking_pdf'
     )
 
+    column_labels = {
+        'id': 'Mã đặt lịch',
+        'customer': 'Khách hàng',
+        'staff': 'Nhân viên',
+        'date': 'Ngày đặt',
+        'time': 'Giờ đặt',
+        'status': 'Trạng thái',
+        'notes': 'Ghi chú',
+        'total_price': 'Tạm tính',
+        'print_booking_pdf': 'In phiếu dịch vụ'
+    }
     exclude_columns = ('booking_services',)
     form_columns = ('status',)
 
@@ -47,9 +58,7 @@ class MyBookingView(AuthenticatedView):
         'status': base.format_booking_status,
     }
 
-    column_labels = {
-        'print_booking_pdf': 'Phiếu dịch vụ'
-    }
+
     form_excluded_columns = ('payment', 'booking_services', 'status')
 
     def get_query(self):
@@ -118,7 +127,7 @@ def init_employee(app):
     employee_index = MyEmployeeIndexView(url="/employee/", endpoint="employee_index", name="Thông tin")
     employee = Admin(
         app,
-        name="Beauty Spa - Cashier",
+        name="Beauty Spa - Employee",
         theme=Bootstrap4Theme(),
         endpoint="employee_index",
         index_view=employee_index,

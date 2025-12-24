@@ -7,7 +7,7 @@
     "DOB": "1985-01-10",
     "address": "123 Admin Street",
     "phone_number": "0123456789",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "admin"
   },
   {
@@ -18,7 +18,7 @@
     "DOB": "1995-05-12",
     "address": "456 Cashier Road",
     "phone_number": "0123456780",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "cashier"
   },
   {
@@ -29,7 +29,7 @@
     "DOB": "1996-08-20",
     "address": "789 Cashier Road",
     "phone_number": "0123456781",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "cashier"
   },
   {
@@ -40,7 +40,7 @@
     "DOB": "1997-03-15",
     "address": "111 Reception Lane",
     "phone_number": "0123456782",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "receptionist"
   },
   {
@@ -51,7 +51,7 @@
     "DOB": "1998-07-05",
     "address": "222 Reception Lane",
     "phone_number": "0123456783",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "receptionist"
   },
   {
@@ -62,7 +62,7 @@
     "DOB": "1994-02-25",
     "address": "333 Employee Street",
     "phone_number": "0123456784",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "employee"
   },
   {
@@ -73,7 +73,7 @@
     "DOB": "1993-11-30",
     "address": "444 Employee Street",
     "phone_number": "0123456785",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "employee"
   },
   {
@@ -84,7 +84,7 @@
     "DOB": "2000-06-01",
     "address": "555 User Ave",
     "phone_number": "0123456786",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "user"
   },
   {
@@ -95,7 +95,7 @@
     "DOB": "2001-09-15",
     "address": "666 User Ave",
     "phone_number": "0123456787",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "user"
   },
   {
@@ -106,7 +106,7 @@
     "DOB": "2002-12-20",
     "address": "777 User Ave",
     "phone_number": "0123456788",
-    "image": "",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
     "role": "user"
   }
 ]

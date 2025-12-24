@@ -1,14 +1,16 @@
 from datetime import datetime
-
+from flask import flash
 from markupsafe import Markup
 from sqlalchemy import extract, or_
+from wtforms import FileField
 
 from spa_app.admin_route import base
 from flask_admin import Admin, expose, BaseView
 from spa_app.admin_route.base import BaseLogoutView
 from spa_app.dao import services_dao, employee_dao
+from spa_app.helpers.cloudinary_helpers import import_to_cloudinary
 from spa_app.models import UserRole, User, Service, Category, Booking, db, PaymentStatus, DiscountStatus, BookingStatus
-from wtforms.fields.simple import TextAreaField, PasswordField
+from wtforms.fields.simple import TextAreaField, PasswordField, StringField
 from wtforms.widgets import TextArea
 from flask_admin.theme import Bootstrap4Theme
 
@@ -33,10 +35,24 @@ class MyUserView(AuthenticatedView):
     form_extra_fields = {
         'password': PasswordField('Password'),
     }
+
+    column_labels = {
+        'username': "Tên đăng nhập",
+        'password': "Mật khẩu",
+        'description': "Mô tả",
+        'gender': 'Giới tính',
+        'DOB': 'Ngày sinh',
+        'address': 'Nắm sinh',
+        'phone_number': 'Số điện thoại',
+        'role': 'Chức vụ',
+        'name': 'Họ và tên',
+    }
     def on_model_change(self, form, model, is_created):
         if form.password.data:
             model.set_hash_password(form.password.data)
         return super().on_model_change(form, model, is_created)
+
+
 
 class MyServiceView(AuthenticatedView, base.BaseServiceView):
     can_export = True
@@ -45,6 +61,21 @@ class MyServiceView(AuthenticatedView, base.BaseServiceView):
     form_overrides = {
         'description': CKTextAreaField
     }
+
+    form_extra_fields = {
+        'image_file': FileField('Chọn ảnh từ máy')
+    }
+
+    column_formatters = {
+        'description': base.format_description
+    }
+    def on_model_change(self, form, model, is_created):
+        if form.image_file.data:
+            url = import_to_cloudinary(form.image_file.data)
+
+            if url:
+                model.image = url
+        return super().on_model_change(form, model, is_created)
 
 class MyCategoryView(AuthenticatedView):
     column_list = ['name', 'products', 'description']

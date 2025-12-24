@@ -22,7 +22,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
                             {{ form.name(class="form-control", placeholder="Nguyễn Văn A",
-                                        **{'data-validate': 'name'}) }}
+                                        **{'data-validate': 'name', 'readonly': 'readonly'}) }}
                             {% if form.name.errors %}
                             <div class="text-danger small">
                                 {% for error in form.name.errors %}
@@ -35,7 +35,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
                             {{ form.phone_number(class="form-control", placeholder="0912345678",
-                                                **{'data-validate': 'phone'}) }}
+                                                **{'data-validate': 'phone', 'readonly': 'readonly'}) }}
                             {% if form.phone_number.errors %}
                             <div class="text-danger small">
                                 {% for error in form.phone_number.errors %}
@@ -48,7 +48,11 @@
 
                     <div class="mb-4">
                         <label class="form-label">Địa chỉ</label>
-                        {{ form.address(class="form-control", placeholder="Số nhà, đường, phường/xã, quận/huyện") }}
+                        {{ form.address(
+                            class="form-control",
+                            placeholder="Số nhà, đường, phường/xã, quận/huyện",
+                            **{'readonly': 'readonly'}
+                        ) }}
                     </div>
 
                     <div class="alert alert-info">

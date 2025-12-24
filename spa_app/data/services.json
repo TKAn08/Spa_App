@@ -50,5 +50,176 @@
     "description" : "loại bỏ lớp da cũ, thúc đẩy tái tạo tế bào da mới, giúp điều trị mụn, giảm thâm, làm sáng da, thu nhỏ lỗ chân lông, mờ nếp nhăn và trẻ hóa làn da",
     "name" : "Peel trị mụn - trẻ hoá",
     "active" : true
+  },
+
+
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 300000,
+    "duration": 60,
+    "category_id": 2,
+    "description": "Massage toàn thân giúp thư giãn cơ bắp và giảm căng thẳng",
+    "name": "Massage toàn thân",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 200000,
+    "duration": 45,
+    "category_id": 2,
+    "description": "Massage cổ, vai, gáy giúp giảm đau mỏi và stress",
+    "name": "Massage cổ vai gáy",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 250000,
+    "duration": 50,
+    "category_id": 2,
+    "description": "Massage chân giúp giảm đau nhức, phù nề và tăng tuần hoàn máu",
+    "name": "Massage chân",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 400000,
+    "duration": 70,
+    "category_id": 2,
+    "description": "Massage body chuyên sâu kết hợp tinh dầu thư giãn",
+    "name": "Massage body tinh dầu",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 350000,
+    "duration": 60,
+    "category_id": 2,
+    "description": "Massage đá nóng giúp giảm căng cơ và cải thiện lưu thông máu",
+    "name": "Massage đá nóng",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 450000,
+    "duration": 90,
+    "category_id": 2,
+    "description": "Massage kết hợp các kỹ thuật chuyên sâu giúp thư giãn toàn diện",
+    "name": "Massage thư giãn chuyên sâu",
+    "outstanding": 1,
+    "active": true
+  },
+
+
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 600000,
+    "duration": 60,
+    "category_id": 3,
+    "description": "Tắm trắng cơ bản giúp làm sáng da toàn thân",
+    "name": "Tắm trắng cơ bản",
+    "outstanding": 1,
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 800000,
+    "duration": 75,
+    "category_id": 3,
+    "description": "Tắm trắng chuyên sâu với dưỡng chất thẩm thấu vào da",
+    "name": "Tắm trắng chuyên sâu",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 500000,
+    "duration": 50,
+    "category_id": 3,
+    "description": "Tắm trắng bằng thảo dược tự nhiên, an toàn cho da nhạy cảm",
+    "name": "Tắm trắng thảo dược",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 900000,
+    "duration": 90,
+    "category_id": 3,
+    "description": "Tắm trắng kết hợp massage giúp da sáng và thư giãn",
+    "name": "Tắm trắng và massage",
+    "outstanding": 1,
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 700000,
+    "duration": 60,
+    "category_id": 3,
+    "description": "Tắm trắng chuyên sâu bằng các dưỡng chất tự nhiên",
+    "name": "Tắm trắng dưỡng chất",
+    "outstanding": 1,
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 1000000,
+    "duration": 120,
+    "category_id": 3,
+    "description": "Tắm trắng VIP với liệu trình toàn diện và dưỡng da",
+    "name": "Tắm trắng VIP",
+    "active": true
+  },
+
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 150000,
+    "duration": 30,
+    "category_id": 4,
+    "description": "Dịch vụ cắt tỉa và làm sạch móng tay cơ bản",
+    "name": "Nail cơ bản",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 250000,
+    "duration": 45,
+    "category_id": 4,
+    "description": "Sơn gel móng tay với nhiều màu sắc thời trang",
+    "name": "Sơn gel móng tay",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 300000,
+    "duration": 60,
+    "category_id": 4,
+    "description": "Thiết kế nail nghệ thuật với các họa tiết sáng tạo",
+    "name": "Nail nghệ thuật",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 400000,
+    "duration": 75,
+    "category_id": 4,
+    "description": "Đắp móng bột hoặc acrylic để tạo hình móng dài và đẹp",
+    "name": "Đắp móng bột",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 350000,
+    "duration": 60,
+    "category_id": 4,
+    "description": "Dịch vụ dưỡng móng và làm mềm da quanh móng",
+    "name": "Dưỡng móng chuyên sâu",
+    "active": true
+  },
+  {
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+    "price": 450000,
+    "duration": 90,
+    "category_id": 4,
+    "description": "Trọn gói nail từ làm sạch, sơn, thiết kế nghệ thuật đến dưỡng móng",
+    "name": "Nail trọn gói",
+    "active": true
   }
 ]

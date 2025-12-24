@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import pdfkit
+import cloudinary
 login = LoginManager()
 db = SQLAlchemy()
 
@@ -17,11 +18,16 @@ def create_app():
     #Giảm giá tối đa 20%
     app.config['MAX_DISCOUNT_VALUE'] = 20
     #Truy cập MySQL WorkBench
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:123456@localhost/spadb?charset=utf8mb4"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:35715982@localhost/spadb?charset=utf8mb4"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config['SECRET_KEY'] = "ADSSAFAMKLMKASFMIO"
     #Tạo paginate
-    app.config["PAGE_SIZE"] = 3
+    app.config["PAGE_SIZE"] = 6
+
+    #Cloudinary
+    cloudinary.config(cloud_name='dohaa2d4l',
+                      api_key='496167823262371',
+                      api_secret='_zC61PZ0FfpMyi7FCGWl6vFLOOM')
     db.init_app(app)
     login.init_app(app)
 

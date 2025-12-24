@@ -1,6 +1,7 @@
 from spa_app import db
-from spa_app.models import User
+from spa_app.models import User, Employee
 from datetime import date, datetime
+
 #file này chứa giao diện người dùng
 
 def add_user(user: User):
@@ -39,10 +40,21 @@ def change_password(user, new_password):
 def check_invalid_phone_number(phone_number):
     return User.query.filter(User.phone_number==phone_number).first() is not None
 
-def change_information(user, name, gender, dob, address, phone_number):
-    user.name = name
-    user.gender = gender
-    user.DOB = dob
-    user.address = address
-    user.phone_number = phone_number
-    db.session.commit()
+def change_information(user, name, gender, dob, address, phone_number, avatar):
+    try:
+        user.name = name
+        user.gender = gender
+        user.DOB = dob
+        user.address = address
+        user.phone_number = phone_number
+
+        #Nếu ko chọn avatar hoặc avatar là chuỗi rỗng
+        if avatar and avatar.strip():
+            user.avatar = avatar
+
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return False, str(e)
+
+

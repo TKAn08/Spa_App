@@ -93,3 +93,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3000);
     }
 });
+
+function togglePassword(btn) {
+    const input = btn.closest('div').querySelector('.password-input');
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+

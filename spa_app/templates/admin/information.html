@@ -20,13 +20,18 @@
                         <span class="fw-bold">{{ user.address }}</span>
                     </div>
                     <div class="p-2">Chức vụ:
-                        <span class="fw-bold">{{ user.role }}</span>
+                        <span class="fw-bold">{{ user.role.value }}</span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="p-2">Trạng thái:
-                        <span class="fw-bold">{{ user.active }}</span>
+                    <div class="p-2">Trạng thái tài khoản:
+                        <span class="fw-bold">{{ user.isActive() }}</span>
                     </div>
+                    {% if user.isEmployee %}
+                    <div class="p-2" >Tình trạng:
+                       <span class="fw-bold">{{ user.isEmployee }}</span>
+                    </div>
+                    {% endif %}
                     <div class="p-2">Tuổi:
                         <span class="fw-bold">{{ age }}</span>
                     </div>
@@ -37,7 +42,7 @@
             </div>
         </div>
         <div class="d-block col-md-6">
-            <img src="#" class="mx-auto d-block">
+            <img src="{{ current_user.avatar }}" class="mx-auto d-block" width="250px" height="250px">
         </div>
     </div>
 </div>

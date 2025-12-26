@@ -140,14 +140,14 @@ class Service(Base):
         "BookingService",
         back_populates="service",
         cascade="all, delete-orphan",
-        overlaps="bookings"
+        overlaps="bookings,services"
     )
 
     bookings = relationship(
         "Booking",
         secondary="booking_service",
         back_populates="services",
-        overlaps="service_bookings"
+        overlaps="booking_services,service_bookings"
     )
 
 
@@ -179,13 +179,13 @@ class BookingService(db.Model):
     booking = relationship(
         "Booking",
         back_populates="booking_services",
-        overlaps="services"
+        overlaps="services,bookings"
     )
 
     service = relationship(
         "Service",
         back_populates="service_bookings",
-        overlaps="bookings"
+        overlaps="bookings,services"
     )
 
 
@@ -222,7 +222,7 @@ class Booking(db.Model):
         "BookingService",
         back_populates="booking",
         cascade="all, delete-orphan",
-        overlaps="services"
+        overlaps="services,bookings"
     )
 
     services = relationship(
@@ -231,7 +231,6 @@ class Booking(db.Model):
         back_populates="bookings",
         overlaps="booking_services,service_bookings"
     )
-
 
 
 # SETTINGS

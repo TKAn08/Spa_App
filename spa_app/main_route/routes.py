@@ -10,16 +10,20 @@ from spa_app.forms.booking_form import BookingConfirmForm, BookingStep4Form, Boo
 from spa_app.helpers import cloudinary_helpers
 from spa_app.models import Setting, Booking, User, BookingStatus, Service, Employee, Category  # THÊM Category
 from spa_app.helpers.booking_helpers import is_booking_valid, auto_assign_employee
+from spa_app.decorator import user_only_required
+
 main_bp = Blueprint('main_bp', __name__)
 
-
+#Trang chính
 @main_bp.route('/')
+@user_only_required
 def index():
     outstanding_services = services_dao.get_outstanding_services()
     return render_template('index.html', outstanding_services=outstanding_services)
 
-
+#Trang service
 @main_bp.route('/service', methods=['GET', 'POST'])
+@user_only_required
 def services_view():
     page = request.args.get('page', 1, type=int)
     cate_id = request.args.get('cate_id', None, type=int)
@@ -30,9 +34,9 @@ def services_view():
     return render_template('services/services.html', services=services,
                            pages=pages, current_page=page, categories=categories)
 
-
+#Trang thông tin của 1 user
 @main_bp.route('/<username>', methods=['GET', 'POST'])
-@login_required
+@user_only_required
 def user_profile(username):
     # Lấy tab từ query string, ví dụ ?tab=information hoặc ?tab=change-password
     tab = request.args.get('tab')  # mặc định là thông tin cá nhân
@@ -94,16 +98,18 @@ def user_profile(username):
         bookings=bookings
     )
 
-
+#Trang thông tin của 1 dịch vụ
 @main_bp.route('/service/<int:id>', methods=['GET', 'POST'])
+@user_only_required
 def services_detail_view(id):
     return render_template('services/service-detail.html',
                            service=services_dao.get_service_by_id(id))
 
     return render_template('services/service-detail.html', service=services_dao.get_service_by_id(id))
 
-
+#Trang liên hệ
 @main_bp.route('/contact')
+@user_only_required
 def contact_view():
     return render_template('contact.html')
 
@@ -114,8 +120,10 @@ def staff_view():
     return render_template('staff.html', employees=employees)
 
 
+#Trang đặt lịch
 # --- Bước 1: Thông tin khách hàng ---
 @main_bp.route('/booking/step1', methods=['GET', 'POST'])
+@user_only_required
 def booking_step1():
     form = BookingStep1Form()
 
@@ -134,9 +142,9 @@ def booking_step1():
         return redirect(url_for('main_bp.booking_step2'))
     return render_template('booking/booking_step1.html', form=form)
 
-
 # --- Bước 2: Chọn dịch vụ ---
 @main_bp.route('/booking/step2', methods=['GET', 'POST'])
+@user_only_required
 def booking_step2():
     form = BookingStep2Form()
 
@@ -183,6 +191,7 @@ def booking_step2():
 
 # --- Bước 3: Chọn nhân viên ---
 @main_bp.route('/booking/step3', methods=['GET', 'POST'])
+@user_only_required
 def booking_step3():
     form = BookingStep3Form()
 
@@ -220,6 +229,7 @@ def booking_step3():
 
 
 @main_bp.route('/booking/step4', methods=['GET', 'POST'])
+@user_only_required
 def booking_step4():
     form = BookingStep4Form()
     booking_data = session.get('booking', {})
@@ -322,6 +332,7 @@ def booking_step4():
 
 
 @main_bp.route('/booking/confirmation', methods=['GET', 'POST'])
+@user_only_required
 def booking_confirmation():
     form = BookingConfirmForm()
     booking_data = session.get('booking')
@@ -440,8 +451,9 @@ def booking_confirmation():
 
 
 
-
+#Trang xem lịch đã đặt
 @main_bp.route('/order')
+@user_only_required
 def booking_history():
     if not current_user.is_authenticated:
         return redirect(url_for('auth_bp.login_view'))
@@ -454,6 +466,7 @@ def booking_history():
 
 
 @main_bp.route('/order/<int:booking_id>')
+@user_only_required
 def booking_detail(booking_id):
     booking = Booking.query.get_or_404(booking_id)
 

@@ -40,8 +40,26 @@
         <div id="form1">
             <input type="text" name="username" placeholder="Tên đăng nhập"
                    value="{{ saved_data.username or '' }}">
-            <input type="password" name="password" placeholder="Mật khẩu">
-            <input type="password" name="confirm_password" placeholder="Nhập lại mật khẩu">
+            <div class="position-relative">
+                <input name="password" class="password-input" type="password" placeholder="Mật khẩu" required>
+                <button type="button"
+                        class="position-absolute top-50 end-0 translate-middle-y mt-1 me-1"
+                        style="border: none; background-color: transparent; padding: 0;"
+                        onclick="togglePassword(this)">
+                    👁
+                </button>
+            </div>
+            <div class="position-relative">
+                <input name="confirm_password" class="password-input" type="password"
+                       placeholder="Nhập lại mật khẩu" required>
+                <button type="button"
+                        class="position-absolute top-50 end-0 translate-middle-y mt-1 me-1"
+                        style="border: none; background-color: transparent; padding: 0;"
+                        onclick="togglePassword(this)">
+                    👁
+                </button>
+            </div>
+
             <div class="error-text"></div>
 
             <div class="btn-box">
